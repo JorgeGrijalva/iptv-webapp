@@ -9,3 +9,7 @@ export const localStorageGet = (
 ): Promise<string | null | undefined> => {
   return get(key)
 }
+
+export const getDateForTimestamp = (seconds: number): Date => {
+  return new Date(seconds * 1000)
+}

@@ -1,68 +1,163 @@
 import {
+  Alert,
   Button,
-  CssVarsProvider,
+  CircularProgress,
   FormControl,
   FormLabel,
   Input,
-  Link,
   Sheet,
   Typography,
 } from "@mui/joy"
+import { useState } from "react"
+import { useAppDispatch } from "../../store/hooks"
+import { setApiConfig, setAppStatus } from "../../store/app/appSlice"
+import {
+  fetchAccountInfo,
+  fetchLiveStreamCategories,
+  fetchLiveStreams,
+  fetchSeriesStreamCategories,
+  fetchSeriesStreams,
+  fetchVODStreamCategories,
+  fetchVODStreams,
+} from "../../store/app/thunks"
 
-export const Login: React.FC<{}> = () => {
+export const Login: React.FC = () => {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [baseUrl, setBaseUrl] = useState("")
+  const [error, setError] = useState("")
+  const dispatch = useAppDispatch()
+  const [status, setStatus] = useState<"idle" | "pending" | "loading">("idle")
+
+  const canSubmit =
+    [username, password, baseUrl].every(Boolean) && status === "idle"
+
+  const handleSubmit = async () => {
+    if (!baseUrl || !baseUrl.startsWith("http")) {
+      setError("Invalid url")
+      return
+    }
+
+    if (!username || username.length === 0) {
+      setError("Username must be provided")
+      return
+    }
+
+    if (!password || password.length === 0) {
+      setError("Password must be provided")
+      return
+    }
+
+    setStatus("pending")
+
+    const config = {
+      baseUrl,
+      auth: {
+        username,
+        password,
+      },
+    }
+
+    try {
+      await dispatch(fetchAccountInfo({ config })).unwrap()
+    } catch (e) {
+      setError("There was an error logging in")
+      setStatus("idle")
+      return
+    }
+
+    setStatus("loading")
+    dispatch(setApiConfig(config))
+    // load common app shit here
+    try {
+      await Promise.all([
+        dispatch(fetchLiveStreamCategories()).unwrap(),
+        dispatch(fetchVODStreamCategories()).unwrap(),
+        dispatch(fetchSeriesStreamCategories()).unwrap,
+        dispatch(fetchLiveStreams()).unwrap,
+        dispatch(fetchVODStreams()).unwrap(),
+        dispatch(fetchSeriesStreams()).unwrap(),
+      ])
+    } catch (e) {
+      console.log(e)
+    }
+
+    dispatch(setAppStatus("ready"))
+  }
+
   return (
-    <CssVarsProvider>
-      <main>
-        <Sheet
-          sx={{
-            width: 300,
-            mx: "auto", // margin left & right
-            my: 4, // margin top & bottom
-            py: 3, // padding top & bottom
-            px: 2, // padding left & right
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            borderRadius: "sm",
-            boxShadow: "md",
-          }}
-          variant="outlined"
-        >
-          <div>
-            <Typography level="h4" component="h1">
-              <b>Welcome!</b>
-            </Typography>
-            <Typography level="body-sm">Sign in to continue.</Typography>
-          </div>
-          <FormControl>
-            <FormLabel>Email</FormLabel>
-            <Input
-              // html input attribute
-              name="email"
-              type="email"
-              placeholder="johndoe@email.com"
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Password</FormLabel>
-            <Input
-              // html input attribute
-              name="password"
-              type="password"
-              placeholder="password"
-            />
-          </FormControl>
-
-          <Button sx={{ mt: 1 /* margin top */ }}>Log in</Button>
-          <Typography
-            endDecorator={<Link href="/sign-up">Sign up</Link>}
-            fontSize="sm"
-            sx={{ alignSelf: "center" }}
-          >
-            Don&apos;t have an account?
+    <main>
+      <Sheet
+        sx={{
+          width: 300,
+          mx: "auto", // margin left & right
+          my: 4, // margin top & bottom
+          py: 3, // padding top & bottom
+          px: 2, // padding left & right
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          borderRadius: "sm",
+          boxShadow: "md",
+          bgcolor: "background.appBody",
+        }}
+        variant="outlined"
+      >
+        <div>
+          <Typography level="h4" component="h1">
+            <b>Welcome!</b>
           </Typography>
-        </Sheet>
-      </main>
-    </CssVarsProvider>
+          <Typography level="body-sm">Sign in to continue.</Typography>
+        </div>
+        {error && error.length > 0 && (
+          <Alert color="danger" variant="solid">
+            {error}
+          </Alert>
+        )}
+        <FormControl>
+          <FormLabel>Url</FormLabel>
+          <Input
+            name="url"
+            type="input"
+            placeholder="http://my-url:port"
+            value={baseUrl}
+            onChange={(e) => setBaseUrl(e.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Username</FormLabel>
+          <Input
+            name="username"
+            type="username"
+            placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Password</FormLabel>
+          <Input
+            name="password"
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </FormControl>
+
+        <Button
+          sx={{ mt: 1 }}
+          startDecorator={
+            status !== "idle" && <CircularProgress variant="solid" />
+          }
+          onClick={handleSubmit}
+          disabled={!canSubmit}
+        >
+          {status === "idle" && <>Log in</>}
+          {status === "pending" && <>Submitting</>}
+          {status === "loading" && <>Performing initial load</>}
+        </Button>
+      </Sheet>
+    </main>
   )
 }

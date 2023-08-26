@@ -21,6 +21,7 @@
     "@mui/joy": "^5.0.0-beta.2",
     "@reduxjs/toolkit": "^1.8.1",
     "idb-keyval": "^6.2.1",
+    "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.1",
