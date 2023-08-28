@@ -13,9 +13,10 @@ import {
   Link,
   Typography,
 } from "@mui/joy"
+import { isVod } from "../services/utils"
 
 export interface MediaCarouselProps {
-  items: VodStream[] | SeriesStream[]
+  items: (VodStream | SeriesStream)[]
   onStreamClick: (stream: VodStream | SeriesStream) => void
 }
 
@@ -61,10 +62,6 @@ export const MediaCarousel: FC<MediaCarouselProps> = (props) => {
   const hasNext = currentPage * pageSize() + pageSize() < items.length - 1
 
   const hasPrev = currentPage > 0
-
-  const isVod = (stream: VodStream | SeriesStream): stream is VodStream => {
-    return (stream as VodStream).stream_id !== undefined
-  }
 
   return (
     <div
