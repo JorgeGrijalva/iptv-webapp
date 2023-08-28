@@ -1,11 +1,13 @@
 import queryString from "query-string"
 import {
-  AccountInfo,
   Category,
   LiveStream,
   SeriesStream,
   VodStream,
   XtremeCodesConfig,
+  AccountInfo,
+  VodInfo,
+  SeriesInfo,
 } from "./XtremeCodesAPI.types"
 
 export class XtremeCodesAPI {
@@ -43,13 +45,13 @@ export class XtremeCodesAPI {
   ): Promise<AccountInfo> {
     const response = await this.execute(config)
 
-    const userInfo: AccountInfo = response.user_info
+    const accountInfo: AccountInfo = response
 
-    if (userInfo.auth === 0) {
+    if (!accountInfo.user_info || accountInfo.user_info.auth === 0) {
       return Promise.reject(new Error("authentication error"))
     }
 
-    return Promise.resolve(userInfo)
+    return Promise.resolve(accountInfo)
   }
 
   public static getLiveStreamCategories(
@@ -113,7 +115,7 @@ export class XtremeCodesAPI {
   public static async getVODInfo(
     config: XtremeCodesConfig,
     id: number,
-  ): Promise<any> {
+  ): Promise<VodInfo> {
     const response = await this.execute(config, "get_vod_info", {
       vod_id: id.toString(),
     })
@@ -128,7 +130,7 @@ export class XtremeCodesAPI {
   public static async getSeriesInfo(
     config: XtremeCodesConfig,
     id: number,
-  ): Promise<any> {
+  ): Promise<SeriesInfo> {
     const response = await this.execute(config, "get_series_info", {
       series_id: id.toString(),
     })
@@ -140,7 +142,8 @@ export class XtremeCodesAPI {
     return Promise.resolve(response)
   }
 
-  public static getEPGForLivetream(
+  // left off here
+  public static getEPGForLiveStream(
     config: XtremeCodesConfig,
     id: number,
     limit: number,

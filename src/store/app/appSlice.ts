@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import {
-  AccountInfo,
   Category,
   LiveStream,
   SeriesStream,
   VodStream,
   XtremeCodesConfig,
+  AccountInfo,
 } from "../../services/XtremeCodesAPI.types"
 import {
   fetchAccountInfo,
@@ -25,12 +25,14 @@ export interface AppState {
   apiConfig: XtremeCodesConfig
   search: string
   accountInfo: AccountInfo
+  lastFetchedAccountInfo: number
   vodCategories: Category[]
   liveCategories: Category[]
   seriesCategories: Category[]
   liveStreams: LiveStream[]
   vodStreams: VodStream[]
   seriesStreams: SeriesStream[]
+  watchList: string[]
 }
 
 const initialState: AppState = {
@@ -38,12 +40,14 @@ const initialState: AppState = {
   apiConfig: { baseUrl: "", auth: { username: "", password: "" } },
   search: "",
   accountInfo: {},
+  lastFetchedAccountInfo: 0,
   vodCategories: [],
   liveCategories: [],
   seriesCategories: [],
   liveStreams: [],
   vodStreams: [],
   seriesStreams: [],
+  watchList: [],
 }
 
 export const appSlice = createSlice({
@@ -82,6 +86,7 @@ export const appSlice = createSlice({
       })
       .addCase(fetchAccountInfo.fulfilled, (state, action) => {
         state.accountInfo = action.payload
+        state.lastFetchedAccountInfo = Date.now()
       })
       .addCase(fetchLiveStreamCategories.fulfilled, (state, action) => {
         state.liveCategories = action.payload

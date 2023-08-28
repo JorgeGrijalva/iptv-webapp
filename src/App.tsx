@@ -23,6 +23,9 @@ import { loadApp } from "./store/app/thunks"
 import { useAppDispatch, useAppSelector } from "./store/hooks"
 import { Login } from "./components/login/Login"
 import { Loading } from "./components/layout/Loading"
+import { Movies } from "./pages/Movies"
+import { AboutMovie } from "./pages/AboutMovie"
+import { WatchMovie } from "./pages/WatchMovie"
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -36,12 +39,12 @@ function App() {
   }, [dispatch, status])
 
   return (
-    <CssVarsProvider disableTransitionOnChange>
+    <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
       {status === "needsAuth" && <Login />}
       {status === "needsLoad" && <Loading />}
       {status === "ready" && (
-        <>
+        <div style={{ overflow: "hidden", width: "100vw", height: "100vh" }}>
           {drawerOpen && (
             <Layout.SideDrawer onClose={() => setDrawerOpen(false)}>
               <Navigator />
@@ -113,7 +116,7 @@ function App() {
                 <IconButton
                   size="sm"
                   variant="soft"
-                  sx={{ display: { xs: "none", sm: "inline-flex" } }}
+                  sx={{ display: { sm: "inline-flex" } }}
                 >
                   <GroupRoundedIcon />
                 </IconButton>
@@ -126,10 +129,13 @@ function App() {
               <Routes>
                 <Route path={urls.home} element={<Dashboard />} />
                 <Route path={urls.liveTv} element={<LiveTV />} />
+                <Route path={urls.movies} element={<Movies />} />
+                <Route path={urls.movieAbout} element={<AboutMovie />} />
+                <Route path={urls.movieWatch} element={<WatchMovie />} />
               </Routes>
             </Layout.Main>
           </Layout.Root>
-        </>
+        </div>
       )}
     </CssVarsProvider>
   )

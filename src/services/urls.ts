@@ -4,4 +4,6 @@ export const urls = {
   movies: "/movies",
   tvShows: "/tv-shows",
   watchlist: "/watchlist",
+  movieAbout: "/movies/about/:id",
+  movieWatch: "/movies/watch/:id",
 }

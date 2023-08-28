@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import {
-  AccountInfo,
   Category,
   LiveStream,
   SeriesStream,
   VodStream,
   XtremeCodesConfig,
+  AccountInfo,
+  VodInfo,
+  SeriesInfo,
 } from "../../services/XtremeCodesAPI.types"
 import { localStorageGet } from "../../services/utils"
 import { STORAGE_KEY } from "../../services/constants"
@@ -214,3 +216,49 @@ export const fetchLiveStreams = createAsyncThunk<
 
   return await XtremeCodesAPI.getLiveStreams(config)
 })
+
+export const fetchVODInfo = createAsyncThunk<
+  VodInfo,
+  { vodId: number },
+  { state: RootState }
+>(
+  "fetchVODInfo",
+  async (arg: { vodId: number }, thunkAPI): Promise<VodInfo> => {
+    const state = thunkAPI.getState()
+
+    const config = state.app.apiConfig
+
+    if (
+      ![config.auth.username, config.auth.password, config.baseUrl].every(
+        Boolean,
+      )
+    ) {
+      return Promise.reject("no api config")
+    }
+
+    return await XtremeCodesAPI.getVODInfo(config, arg.vodId)
+  },
+)
+
+export const fetchSeriesInfo = createAsyncThunk<
+  SeriesInfo,
+  { seriesId: number },
+  { state: RootState }
+>(
+  "fetchSeriesInfo",
+  async (arg: { seriesId: number }, thunkAPI): Promise<SeriesInfo> => {
+    const state = thunkAPI.getState()
+
+    const config = state.app.apiConfig
+
+    if (
+      ![config.auth.username, config.auth.password, config.baseUrl].every(
+        Boolean,
+      )
+    ) {
+      return Promise.reject("no api config")
+    }
+
+    return await XtremeCodesAPI.getSeriesInfo(config, arg.seriesId)
+  },
+)
