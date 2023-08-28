@@ -1,38 +1,39 @@
 import { FC, useRef, useState } from "react"
-import { selectAppState } from "../store/app/selector"
+import { SeriesStream } from "../services/XtremeCodesAPI.types"
 import { useAppSelector } from "../store/hooks"
-import { VodStream } from "../services/XtremeCodesAPI.types"
-import { Box, Modal, ModalClose, Typography } from "@mui/joy"
+import { selectAppState } from "../store/app/selector"
 import { useVirtualizer } from "@tanstack/react-virtual"
-import { VodInfoComponent } from "../components/VodInfoComponent"
 import { MediaCarousel } from "../components/MediaCarousel"
+import { Box, Modal, ModalClose, Typography } from "@mui/joy"
+import { SeriesInfoComponent } from "../components/SeriesInfoComponent"
 
-export const Movies: FC = () => {
-  const { vodStreams, vodCategories } = useAppSelector(selectAppState)
-  const [currentMovie, setCurrentMovie] = useState<VodStream | undefined>(
+export const TVSeries: FC = (props) => {
+  const { seriesCategories, seriesStreams } = useAppSelector(selectAppState)
+  const [currentSeries, setCurrentSeries] = useState<SeriesStream | undefined>(
     undefined,
   )
   const parentRef = useRef<HTMLDivElement>(null)
 
   const rowVirtualizer = useVirtualizer({
-    count: vodCategories.length,
+    count: seriesCategories.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 350,
     overscan: 5,
     paddingEnd: 50,
   })
 
-  const onMovieClick = (movie: VodStream) => {
-    console.log(movie)
-    setCurrentMovie(movie)
+  const onSeriesClick = (series: SeriesStream) => {
+    console.log(series)
+    setCurrentSeries(series)
   }
-
-  console.log(rowVirtualizer.getVirtualItems())
 
   return (
     <>
-      {currentMovie && (
-        <Modal open={!!currentMovie} onClose={() => setCurrentMovie(undefined)}>
+      {currentSeries && (
+        <Modal
+          open={!!currentSeries}
+          onClose={() => setCurrentSeries(undefined)}
+        >
           <Box
             sx={{
               minWidth: 300,
@@ -50,9 +51,9 @@ export const Movies: FC = () => {
               justifyContent="center"
               display="flex"
             >
-              {currentMovie?.name}
+              {currentSeries?.name}
             </Typography>
-            <VodInfoComponent vod={currentMovie} />
+            <SeriesInfoComponent series={currentSeries} />
           </Box>
         </Modal>
       )}
@@ -78,7 +79,7 @@ export const Movies: FC = () => {
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualItem) => {
-            const category = vodCategories[virtualItem.index]
+            const category = seriesCategories[virtualItem.index]
             return (
               <div
                 key={virtualItem.index}
@@ -99,10 +100,10 @@ export const Movies: FC = () => {
                   {category.category_name}
                 </Typography>
                 <MediaCarousel
-                  items={vodStreams.filter(
+                  items={seriesStreams.filter(
                     (stream) => stream.category_id === category.category_id,
                   )}
-                  onStreamClick={onMovieClick}
+                  onStreamClick={onSeriesClick}
                 />
               </div>
             )

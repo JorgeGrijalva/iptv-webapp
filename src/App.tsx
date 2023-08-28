@@ -26,6 +26,7 @@ import { Loading } from "./components/layout/Loading"
 import { Movies } from "./pages/Movies"
 import { AboutMovie } from "./pages/AboutMovie"
 import { WatchMovie } from "./pages/WatchMovie"
+import { TVSeries } from "./pages/TVSeries"
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -132,6 +133,7 @@ function App() {
                 <Route path={urls.movies} element={<Movies />} />
                 <Route path={urls.movieAbout} element={<AboutMovie />} />
                 <Route path={urls.movieWatch} element={<WatchMovie />} />
+                <Route path={urls.tvShows} element={<TVSeries />} />
               </Routes>
             </Layout.Main>
           </Layout.Root>
