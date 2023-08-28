@@ -32,6 +32,7 @@ export const Movies: FC = () => {
     getScrollElement: () => parentRef.current,
     estimateSize: () => 350,
     overscan: 5,
+    paddingEnd: 50,
   })
 
   const onMovieClick = (movie: VodStream) => {
@@ -72,10 +73,11 @@ export const Movies: FC = () => {
         ref={parentRef}
         style={{
           width: "100%",
-          height: "500px",
+          height: "100%",
           maxHeight: "100%",
           maxWidth: "100%",
           overflow: "auto",
+          position: "relative",
           //overflow: "hidden",
         }}
       >
@@ -232,12 +234,13 @@ const MovieCarousel: FC<MovieCarouselProps> = (props) => {
                 level="title-lg"
                 textColor="#fff"
                 textOverflow="ellipsis"
-                overflow="hidden"
+                overflow="clip"
               >
                 <Link
                   overlay
                   underline="none"
                   textColor="inherit"
+                  textOverflow="ellipsis"
                   onClick={() => onStreamClick(item)}
                 >
                   {item.name}

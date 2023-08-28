@@ -1,36 +1,61 @@
 import { Link } from "@mui/joy"
-import { FC } from "react"
+import { FC, useEffect, useRef } from "react"
+import videojs from "video.js"
+import Player from "video.js/dist/types/player"
+import "video.js/dist/video-js.css"
 
 export interface VideoPlayerProps {
-  url: string
-  poster: string
+  options: any
+  onReady?: (player: Player) => void
 }
 
 export const VideoPlayer: FC<VideoPlayerProps> = (props) => {
-  const { url, poster } = props
+  const { options, onReady } = props
+  const videoRef = useRef<HTMLDivElement | null>(null)
+  const playerRef = useRef<Player | null>(null)
+
+  useEffect(() => {
+    // Make sure Video.js player is only initialized once
+    if (!playerRef.current) {
+      if (!videoRef.current) return
+
+      // The Video.js player needs to be _inside_ the component el for React 18 Strict Mode.
+      const videoElement = document.createElement("video-js")
+
+      videoElement.classList.add("vjs-big-play-centered")
+      videoRef.current.appendChild(videoElement)
+
+      const player = (playerRef.current = videojs(videoElement, options, () => {
+        videojs.log("player is ready")
+        onReady && onReady(player)
+      }))
+
+      // You could update an existing player in the `else` block here
+      // on prop change, for example:
+    } else {
+      const player = playerRef.current
+
+      //player.autoplay(options.autoplay)
+      // @ts-ignore
+      player.src(url)
+    }
+  }, [videoRef, options])
+
+  // Dispose the Video.js player when the functional component unmounts
+  useEffect(() => {
+    const player = playerRef.current
+
+    return () => {
+      if (player && !player.isDisposed()) {
+        player.dispose()
+        playerRef.current = null
+      }
+    }
+  }, [playerRef])
 
   return (
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-        overflow: "hidden",
-        justifyContent: "center",
-        alignContent: "center",
-        display: "flex",
-      }}
-    >
-      <video
-        src={url}
-        controls
-        poster={poster}
-        style={{ objectFit: "contain" }}
-      >
-        Sorry, your browser doesn't support playing this video format, but don't
-        worry, you can
-        <Link href={url}>download it</Link>
-        and watch it with your favorite video player!
-      </video>
+    <div data-vjs-player>
+      <div ref={videoRef} />
     </div>
   )
 }

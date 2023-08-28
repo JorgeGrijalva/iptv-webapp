@@ -125,7 +125,7 @@ function App() {
             <Layout.SideNav>
               <Navigator />
             </Layout.SideNav>
-            <Layout.Main>
+            <Layout.Main sx={{ height: "100vh" }}>
               <Routes>
                 <Route path={urls.home} element={<Dashboard />} />
                 <Route path={urls.liveTv} element={<LiveTV />} />
