@@ -19,7 +19,7 @@ export const Dashboard: FC = () => {
     liveStreams,
     vodStreams,
     seriesStreams,
-    watchList,
+    watchlist,
     lastFetchedAccountInfo,
   } = useAppSelector(selectAppState)
   const dispatch = useAppDispatch()
@@ -194,7 +194,7 @@ export const Dashboard: FC = () => {
                 justifyContent="center"
                 display="flex"
               >
-                {watchList.length}
+                {watchlist.length}
               </Typography>
             </div>
           </Sheet>

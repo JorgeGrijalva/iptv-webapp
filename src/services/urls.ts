@@ -6,4 +6,5 @@ export const urls = {
   watchlist: "/watchlist",
   movieWatch: "/movies/watch/:id",
   seriesWatch: "/tv-shows/watch/:id",
+  search: "/search",
 }

@@ -51,6 +51,7 @@ export const MediaCarousel: FC<MediaCarouselProps> = (props) => {
 
     setCurrentPage((prev) => prev - 1)
   }
+
   const handleClickNext = () => {
     const lastElementIndex = currentPage * pageSize() + pageSize()
 

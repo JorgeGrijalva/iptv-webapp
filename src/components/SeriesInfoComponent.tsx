@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react"
+import { FC, useCallback, useEffect, useState } from "react"
 import {
   SeriesEpisode,
   SeriesInfo,
@@ -45,8 +45,6 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
       .unwrap()
       .then((info) => {
         setInfo(info)
-        const firstSeason = info.seasons?.find((value) => value.name)
-        setSelectedSeason(firstSeason)
         setState("ready")
         console.log(info)
       })
@@ -59,6 +57,31 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
   const onEpisodeClick = (episode: SeriesEpisode) => {
     if (onSelectEpisode) onSelectEpisode(episode)
   }
+
+  const seasons = useCallback(() => {
+    const seasons: SeriesSeason[] = []
+
+    if (!info) return seasons
+
+    if (info.seasons && info.seasons.length > 0) return info.seasons
+
+    if (!info.episodes) return seasons
+
+    const seasonIds = Object.keys(info.episodes)
+
+    for (const seasonId of seasonIds) {
+      seasons.push({ season_number: Number(seasonId) })
+    }
+
+    return seasons
+  }, [info])
+
+  useEffect(() => {
+    const firstSeason = seasons().find(
+      (value) => value.season_number !== undefined,
+    )
+    setSelectedSeason(firstSeason)
+  }, [seasons])
 
   if (state === "loading") return <Loading />
 
@@ -118,7 +141,7 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
                   }}
                   variant="soft"
                 >
-                  {info?.seasons?.map((season) => (
+                  {seasons().map((season) => (
                     <MenuItem
                       key={season.season_number}
                       sx={{ justifyContent: "center" }}
@@ -160,7 +183,9 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
             </Typography>
             <EpisodesCarousel
               episodes={
-                info?.episodes[selectedSeason.season_number?.toString() ?? "1"]
+                info?.episodes[
+                  selectedSeason.season_number?.toString() ?? "1"
+                ] ?? []
               }
               onEpisodeClick={onEpisodeClick}
               activeEpisode={selectedEpisode}

@@ -3,7 +3,6 @@ import {
   CssBaseline,
   CssVarsProvider,
   IconButton,
-  Input,
   Typography,
 } from "@mui/joy"
 import Layout from "./components/layout/Layout"
@@ -14,10 +13,6 @@ import { Route, Routes } from "react-router-dom"
 import { urls } from "./services/urls"
 import { Dashboard } from "./pages/Dashboard"
 import { LiveTV } from "./pages/LiveTV"
-
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded"
-import GroupRoundedIcon from "@mui/icons-material/GroupRounded"
-import MenuIcon from "@mui/icons-material/Menu"
 import { selectAppStatus } from "./store/app/selector"
 import { loadApp } from "./store/app/thunks"
 import { useAppDispatch, useAppSelector } from "./store/hooks"
@@ -27,6 +22,11 @@ import { Movies } from "./pages/Movies"
 import { WatchMovie } from "./pages/movies/WatchMovie"
 import { TVSeries } from "./pages/TVSeries"
 import { WatchSeries } from "./pages/shows/WatchSeries"
+import { SearchInput } from "./components/SearchInput"
+
+import GroupRoundedIcon from "@mui/icons-material/GroupRounded"
+import MenuIcon from "@mui/icons-material/Menu"
+import { SearchResults } from "./pages/SearchResults"
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -80,31 +80,7 @@ function App() {
                   My TV App
                 </Typography>
               </Box>
-              <Input
-                size="sm"
-                variant="outlined"
-                placeholder="Search anything…"
-                startDecorator={<SearchRoundedIcon color="primary" />}
-                endDecorator={
-                  <IconButton variant="outlined" color="neutral">
-                    <Typography
-                      fontWeight="lg"
-                      fontSize="sm"
-                      textColor="text.icon"
-                    >
-                      ⌘ + k
-                    </Typography>
-                  </IconButton>
-                }
-                sx={{
-                  flexBasis: "500px",
-                  display: {
-                    xs: "none",
-                    sm: "flex",
-                  },
-                  boxShadow: "sm",
-                }}
-              />
+              <SearchInput />
               <Box
                 sx={{
                   display: "flex",
@@ -134,6 +110,7 @@ function App() {
                 <Route path={urls.movieWatch} element={<WatchMovie />} />
                 <Route path={urls.tvShows} element={<TVSeries />} />
                 <Route path={urls.seriesWatch} element={<WatchSeries />} />
+                <Route path={urls.search} element={<SearchResults />} />
               </Routes>
             </Layout.Main>
           </Layout.Root>

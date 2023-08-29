@@ -18,6 +18,16 @@ export const selectLiveStreams = createSelector(
   (app) => app.liveStreams,
 )
 
+export const selectVodStreams = createSelector(
+  selectAppState,
+  (app) => app.vodStreams,
+)
+
+export const selectSeriesStreams = createSelector(
+  selectAppState,
+  (app) => app.seriesStreams,
+)
+
 export const selectPreferredBaseUrl = createSelector(
   selectAccountInfo,
   (accountInfo) =>
