@@ -1,9 +1,11 @@
 import { FC } from "react"
 import { SeriesStream, VodStream } from "../services/XtremeCodesAPI.types"
-import { Box, Modal, ModalClose, Typography } from "@mui/joy"
+import { Box, Button, Modal, ModalClose, Typography } from "@mui/joy"
 import { VodInfoComponent } from "./VodInfoComponent"
 import { isVod } from "../services/utils"
 import { SeriesInfoComponent } from "./SeriesInfoComponent"
+import { useNavigate } from "react-router-dom"
+import { urls } from "../services/urls"
 
 export interface MediaInfoModalProps {
   onClose: () => void
@@ -12,9 +14,22 @@ export interface MediaInfoModalProps {
 
 export const MediaInfoModal: FC<MediaInfoModalProps> = (props) => {
   const { onClose, stream } = props
+  const navigate = useNavigate()
+
+  const onClickWatch = () => {
+    if (isVod(stream)) {
+      if (stream.stream_id === undefined) return
+
+      navigate(urls.movieWatch.replace(":id", stream.stream_id.toString()))
+    } else {
+      if (stream.series_id === undefined) return
+
+      navigate(urls.seriesWatch.replace(":id", stream.series_id.toString()))
+    }
+  }
 
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open={true} onClose={onClose} sx={{ overflow: "auto" }}>
       <Box
         sx={{
           minWidth: 300,
@@ -35,9 +50,23 @@ export const MediaInfoModal: FC<MediaInfoModalProps> = (props) => {
           {stream?.name}
         </Typography>
         {isVod(stream) ? (
-          <VodInfoComponent vod={stream} />
+          <VodInfoComponent
+            vod={stream}
+            playButton={
+              <Button variant="solid" color="success" onClick={onClickWatch}>
+                Play
+              </Button>
+            }
+          />
         ) : (
-          <SeriesInfoComponent series={stream} />
+          <SeriesInfoComponent
+            series={stream}
+            playButton={
+              <Button variant="solid" color="success" onClick={onClickWatch}>
+                Play
+              </Button>
+            }
+          />
         )}
       </Box>
     </Modal>

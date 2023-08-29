@@ -4,21 +4,19 @@ import { AspectRatio, Button, ButtonGroup, Grid, Typography } from "@mui/joy"
 import { useAppDispatch } from "../store/hooks"
 import { fetchVODInfo } from "../store/app/thunks"
 import { YoutubeVideo } from "./YoutubeVideo"
-import { useNavigate } from "react-router-dom"
-import { urls } from "../services/urls"
 import { Loading } from "./layout/Loading"
 
 export interface VodInfoProps {
   vod: VodStream
+  playButton?: JSX.Element
 }
 
 export const VodInfoComponent: FC<VodInfoProps> = (props) => {
-  const { vod } = props
+  const { vod, playButton } = props
   const [info, setInfo] = useState<VodInfo | undefined>(undefined)
   const [trailerVisible, setTrailerVisible] = useState(false)
   const [state, setState] = useState<"loading" | "ready" | "error">("loading")
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (!vod || !vod.stream_id) return
@@ -37,12 +35,6 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
 
   if (state === "loading") return <Loading />
 
-  const onClickWatch = () => {
-    if (vod.stream_id === undefined) return
-
-    navigate(urls.movieWatch.replace(":id", vod.stream_id.toString()))
-  }
-
   const showTrailer = trailerVisible && info?.info?.youtube_trailer
 
   return (
@@ -55,7 +47,6 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
         justifyContent: "center",
         marginTop: 5,
       }}
-      overflow="auto"
     >
       <Grid
         xs={12}
@@ -72,45 +63,49 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
         )}
       </Grid>
       <Grid xs={12} sm={12} md={7}>
-        {state === "ready" && (
-          <div style={{ justifyContent: "center" }}>
+        <div style={{ justifyContent: "center" }}>
+          {state === "ready" && (
+            <>
+              <Typography level="body-lg" marginBottom={1}>
+                {info?.info?.plot}
+              </Typography>
+              <Typography>
+                <b>Release Date:</b> {info?.info?.releasedate}
+              </Typography>
+              <Typography>
+                <b>Duration:</b> {info?.info?.duration}
+              </Typography>
+              <Typography>
+                <b>Genre:</b> {info?.info?.genre}
+              </Typography>
+              <Typography>
+                <b>Directed By:</b> {info?.info?.director}
+              </Typography>
+              <Typography>
+                <b>Cast:</b> {info?.info?.cast}
+              </Typography>
+            </>
+          )}
+          {state === "error" && (
             <Typography level="body-lg" marginBottom={1}>
-              {info?.info?.plot}
+              There was an error loading information for that title
             </Typography>
-            <Typography>
-              <b>Release Date:</b> {info?.info?.releasedate}
-            </Typography>
-            <Typography>
-              <b>Duration:</b> {info?.info?.duration}
-            </Typography>
-            <Typography>
-              <b>Genre:</b> {info?.info?.genre}
-            </Typography>
-            <Typography>
-              <b>Cast:</b> {info?.info?.cast}
-            </Typography>
-            <ButtonGroup sx={{ margin: 5 }} spacing="0.5rem">
-              <Button
-                variant="solid"
-                color="neutral"
-                onClick={() => setTrailerVisible((prev) => !prev)}
-              >
-                Watch Trailer
-              </Button>
-              <Button variant="solid" color="primary">
-                Add to Watchlist
-              </Button>
-              <Button variant="solid" color="success" onClick={onClickWatch}>
-                Play
-              </Button>
-            </ButtonGroup>
-          </div>
-        )}
-        {state === "error" && (
-          <Typography level="body-lg" marginBottom={1}>
-            There was an error loading that title
-          </Typography>
-        )}
+          )}
+          <ButtonGroup sx={{ margin: 5 }} spacing="0.5rem">
+            <Button
+              variant="solid"
+              color="neutral"
+              onClick={() => setTrailerVisible((prev) => !prev)}
+              disabled={!info || !info.info?.youtube_trailer}
+            >
+              Watch Trailer
+            </Button>
+            <Button variant="solid" color="primary">
+              Add to Watchlist
+            </Button>
+            {playButton !== undefined && playButton}
+          </ButtonGroup>
+        </div>
       </Grid>
     </Grid>
   )

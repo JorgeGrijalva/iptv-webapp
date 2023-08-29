@@ -19,11 +19,11 @@ import {
 } from "./thunks"
 import { localStorageSet } from "../../services/utils"
 import { STORAGE_KEY } from "../../services/constants"
+import { WatchlistItem } from "../types"
 
 export interface AppState {
   status: "needsLoad" | "needsAuth" | "ready"
   apiConfig: XtremeCodesConfig
-  search: string
   accountInfo: AccountInfo
   lastFetchedAccountInfo: number
   vodCategories: Category[]
@@ -32,13 +32,12 @@ export interface AppState {
   liveStreams: LiveStream[]
   vodStreams: VodStream[]
   seriesStreams: SeriesStream[]
-  watchList: string[]
+  watchlist: WatchlistItem[]
 }
 
 const initialState: AppState = {
   status: "needsLoad",
   apiConfig: { baseUrl: "", auth: { username: "", password: "" } },
-  search: "",
   accountInfo: {},
   lastFetchedAccountInfo: 0,
   vodCategories: [],
@@ -47,7 +46,7 @@ const initialState: AppState = {
   liveStreams: [],
   vodStreams: [],
   seriesStreams: [],
-  watchList: [],
+  watchlist: [],
 }
 
 export const appSlice = createSlice({
@@ -66,6 +65,9 @@ export const appSlice = createSlice({
       action: PayloadAction<"needsLoad" | "needsAuth" | "ready">,
     ) => {
       state.status = action.payload
+    },
+    addItemToWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
+      state.watchlist = [...state.watchlist, action.payload]
     },
   },
   extraReducers: (builder) => {

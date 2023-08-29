@@ -5,7 +5,7 @@ import { selectAppState } from "../store/app/selector"
 import { MediaInfoModal } from "../components/MediaInfoModal"
 import { MediaVirtualizedList } from "../components/MediaVirtualizedList"
 
-export const TVSeries: FC = (props) => {
+export const TVSeries: FC = () => {
   const { seriesCategories, seriesStreams } = useAppSelector(selectAppState)
   const [currentSeries, setCurrentSeries] = useState<SeriesStream | undefined>(
     undefined,

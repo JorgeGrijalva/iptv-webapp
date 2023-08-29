@@ -24,9 +24,9 @@ import { useAppDispatch, useAppSelector } from "./store/hooks"
 import { Login } from "./components/login/Login"
 import { Loading } from "./components/layout/Loading"
 import { Movies } from "./pages/Movies"
-import { AboutMovie } from "./pages/AboutMovie"
-import { WatchMovie } from "./pages/WatchMovie"
+import { WatchMovie } from "./pages/movies/WatchMovie"
 import { TVSeries } from "./pages/TVSeries"
+import { WatchSeries } from "./pages/shows/WatchSeries"
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -131,9 +131,9 @@ function App() {
                 <Route path={urls.home} element={<Dashboard />} />
                 <Route path={urls.liveTv} element={<LiveTV />} />
                 <Route path={urls.movies} element={<Movies />} />
-                <Route path={urls.movieAbout} element={<AboutMovie />} />
                 <Route path={urls.movieWatch} element={<WatchMovie />} />
                 <Route path={urls.tvShows} element={<TVSeries />} />
+                <Route path={urls.seriesWatch} element={<WatchSeries />} />
               </Routes>
             </Layout.Main>
           </Layout.Root>

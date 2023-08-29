@@ -114,66 +114,8 @@ export interface VodInfo {
     backdrop_path?: string[]
     duration_secs?: number
     duration?: string
-    video?: {
-      index?: number
-      codec_name?: string
-      codec_long_name?: string
-      profile?: string // number or string ??
-      codec_type?: "video" | "audio"
-      codec_tag_string?: string
-      codec_tag?: string // number or string ??
-      width?: number
-      height?: number
-      coded_width?: number
-      coded_height?: number
-      closed_captions?: number
-      film_grain?: number
-      has_b_frames?: number
-      sample_aspect_ratio?: string
-      display_aspect_ratio?: string
-      pix_fmt?: string
-      level?: number
-      color_range?: string // 'tv' or ??
-      color_space?: string
-      color_transfer?: string
-      color_primaries?: string
-      chroma_location?: string
-      field_order?: string // progressive or ??
-      refs?: number
-      is_avc?: boolean // check if casting is done properly, sent as string
-      nal_length_size?: number
-      r_frame_rate?: string
-      avg_frame_rate?: string
-      time_base?: string
-      start_pts?: number
-      start_time?: number
-      bits_per_raw_sample?: number
-      extradata_size?: number
-      disposition?: Disposition
-      tags?: Tags
-    }
-    audio?: {
-      index?: number
-      codec_name?: string
-      codec_long_name?: string
-      profile?: string // string or number?
-      codec_type?: "audio" | "video"
-      codec_tag_string?: string
-      codec_tag?: string // string or num?
-      sample_fmt?: string
-      sample_rate?: number
-      channels?: number
-      channel_layout?: string // stereo or ??
-      bits_per_sample?: number
-      r_frame_rate?: string
-      avg_frame_rate?: string
-      time_base?: string
-      start_pts?: number
-      start_time?: number
-      extradata_size?: number
-      disposition?: Disposition
-      tags?: Tags
-    }
+    video?: VideoInformation
+    audio?: AudioInformation
     bitrate?: number
     rating?: number
     status?: string // Released or ??
@@ -209,7 +151,17 @@ export interface SeriesEpisode {
   episode_num?: number
   title?: string
   container_extension?: string
-  info?: string[]
+  info?: {
+    air_date?: string
+    rating?: number
+    id?: number
+    movie_image?: string
+    duration_secs?: number
+    duration?: string
+    video?: VideoInformation
+    audio?: AudioInformation
+    bitrate?: number
+  }
   custom_sid?: string
   added?: number
   season?: number
@@ -260,3 +212,67 @@ export interface Tags {
   ENCODER?: string
   DURATION?: string
 }
+
+export interface VideoInformation {
+  index?: number
+  codec_name?: string
+  codec_long_name?: string
+  profile?: string // number or string ??
+  codec_type?: CodecType
+  codec_tag_string?: string
+  codec_tag?: string // number or string ??
+  width?: number
+  height?: number
+  coded_width?: number
+  coded_height?: number
+  closed_captions?: number
+  film_grain?: number
+  has_b_frames?: number
+  sample_aspect_ratio?: string
+  display_aspect_ratio?: string
+  pix_fmt?: string
+  level?: number
+  color_range?: string // 'tv' or ??
+  color_space?: string
+  color_transfer?: string
+  color_primaries?: string
+  chroma_location?: string
+  field_order?: string // progressive or ??
+  refs?: number
+  is_avc?: boolean // check if casting is done properly, sent as string
+  nal_length_size?: number
+  r_frame_rate?: string
+  avg_frame_rate?: string
+  time_base?: string
+  start_pts?: number
+  start_time?: number
+  bits_per_raw_sample?: number
+  extradata_size?: number
+  disposition?: Disposition
+  tags?: Tags
+}
+
+export interface AudioInformation {
+  index?: number
+  codec_name?: string
+  codec_long_name?: string
+  profile?: string // string or number?
+  codec_type?: CodecType
+  codec_tag_string?: string
+  codec_tag?: string // string or num?
+  sample_fmt?: string
+  sample_rate?: number
+  channels?: number
+  channel_layout?: string // stereo or ??
+  bits_per_sample?: number
+  r_frame_rate?: string
+  avg_frame_rate?: string
+  time_base?: string
+  start_pts?: number
+  start_time?: number
+  extradata_size?: number
+  disposition?: Disposition
+  tags?: Tags
+}
+
+export type CodecType = "audio" | "video"

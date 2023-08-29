@@ -20,3 +20,22 @@ export const isVod = (
 ): stream is VodStream => {
   return (stream as VodStream).stream_id !== undefined
 }
+
+export const containerToMimeType = (container: string): string => {
+  switch (container) {
+    case "mkv":
+      return "webm"
+    case "avi":
+      return "x-msvideo"
+    case "3gp":
+      return "3gpp"
+    case ".mpg":
+    case "mpeg":
+      return "mpeg"
+    case "ogg":
+    case "ogv":
+      return "ogg"
+    default:
+      return container
+  }
+}

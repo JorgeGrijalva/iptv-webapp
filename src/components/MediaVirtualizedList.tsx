@@ -30,14 +30,9 @@ export const MediaVirtualizedList: FC<MediaVirtualizedListProps> = (props) => {
     <div
       ref={parentRef}
       style={{
-        //width: "100%",
         height: "100%",
-        //maxHeight: "100%",
-        //maxWidth: "100%",
         overflow: "auto",
-        position: "relative",
         margin: -16,
-        //overflow: "hidden",
       }}
     >
       <div
@@ -45,7 +40,6 @@ export const MediaVirtualizedList: FC<MediaVirtualizedListProps> = (props) => {
           height: `${rowVirtualizer.getTotalSize()}px`,
           width: "100%",
           position: "relative",
-          //overflow: "auto",
         }}
       >
         {rowVirtualizer.getVirtualItems().map((virtualItem) => {

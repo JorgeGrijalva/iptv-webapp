@@ -1,4 +1,3 @@
-import { Link } from "@mui/joy"
 import { FC, useEffect, useRef } from "react"
 import videojs from "video.js"
 import Player from "video.js/dist/types/player"
@@ -36,10 +35,14 @@ export const VideoPlayer: FC<VideoPlayerProps> = (props) => {
       const player = playerRef.current
 
       //player.autoplay(options.autoplay)
-      // @ts-ignore
-      player.src(url)
+      player.options(options)
+      player.updateSourceCaches_(options.sources)
+      player.poster(options.poster)
+      player.src(options.sources)
+      //player.src(options.url)
+      //player.load()
     }
-  }, [videoRef, options])
+  }, [videoRef, options, onReady])
 
   // Dispose the Video.js player when the functional component unmounts
   useEffect(() => {
