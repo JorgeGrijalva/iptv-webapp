@@ -28,6 +28,21 @@ export const selectSeriesStreams = createSelector(
   (app) => app.seriesStreams,
 )
 
+export const selectLiveCategories = createSelector(
+  selectAppState,
+  (app) => app.liveCategories,
+)
+
+export const selectVodCategories = createSelector(
+  selectAppState,
+  (app) => app.vodCategories,
+)
+
+export const selectSeriesCategories = createSelector(
+  selectAppState,
+  (app) => app.seriesCategories,
+)
+
 export const selectPreferredBaseUrl = createSelector(
   selectAccountInfo,
   (accountInfo) =>

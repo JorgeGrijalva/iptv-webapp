@@ -1,15 +1,16 @@
 import { Typography } from "@mui/joy"
-import { FC, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import { MediaCarousel } from "../components/MediaCarousel"
 import { useAppSelector } from "../store/hooks"
-import { selectAppState } from "../store/app/selector"
+import { selectSeriesStreams, selectVodStreams } from "../store/app/selector"
 import { SeriesStream, VodStream } from "../services/XtremeCodesAPI.types"
 import { MediaInfoModal } from "../components/MediaInfoModal"
 
 export const SearchResults: FC = () => {
   const [searchParams] = useSearchParams()
-  const { vodStreams, seriesStreams } = useAppSelector(selectAppState)
+  const seriesStreams = useAppSelector(selectSeriesStreams)
+  const vodStreams = useAppSelector(selectVodStreams)
   const [selectedTitle, setSelectedTitle] = useState<
     (VodStream | SeriesStream) | undefined
   >(undefined)
@@ -19,6 +20,22 @@ export const SearchResults: FC = () => {
   const onStreamClick = (stream: VodStream | SeriesStream) => {
     setSelectedTitle(stream)
   }
+
+  const filteredSeries = useCallback(() => {
+    if (!query) return []
+
+    return seriesStreams.filter((stream) =>
+      stream.name?.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+    )
+  }, [query, seriesStreams])
+
+  const filteredMovies = useCallback(() => {
+    if (!query) return []
+
+    return vodStreams.filter((stream) =>
+      stream.name?.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+    )
+  }, [query, vodStreams])
 
   return (
     <>
@@ -40,11 +57,7 @@ export const SearchResults: FC = () => {
                 Movies
               </Typography>
               <MediaCarousel
-                items={vodStreams.filter((stream) =>
-                  stream.name
-                    ?.toLocaleLowerCase()
-                    .includes(query.toLocaleLowerCase()),
-                )}
+                items={filteredMovies()}
                 onStreamClick={onStreamClick}
                 key={query}
               />
@@ -58,11 +71,7 @@ export const SearchResults: FC = () => {
                 Series
               </Typography>
               <MediaCarousel
-                items={seriesStreams.filter((stream) =>
-                  stream.name
-                    ?.toLocaleLowerCase()
-                    .includes(query.toLocaleLowerCase()),
-                )}
+                items={filteredSeries()}
                 onStreamClick={onStreamClick}
                 key={query}
               />

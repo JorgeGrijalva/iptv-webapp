@@ -13,6 +13,7 @@ import { localStorageGet } from "../../services/utils"
 import { STORAGE_KEY } from "../../services/constants"
 import { XtremeCodesAPI } from "../../services/XtremeCodesAPI"
 import { RootState } from "../store"
+import { WatchlistItem } from "../types"
 
 export const loadApp = createAsyncThunk<
   {
@@ -40,6 +41,8 @@ export const loadApp = createAsyncThunk<
     vodStreams: VodStream[]
     seriesStreams: SeriesStream[]
   }> => {
+    thunkAPI.dispatch(loadWatchlist)
+
     const apiConfig = await localStorageGet(STORAGE_KEY.API_CONFIG)
 
     if (!apiConfig) return Promise.reject("no stored login found")
@@ -92,6 +95,19 @@ export const loadApp = createAsyncThunk<
     }
   },
 )
+
+export const loadWatchlist = createAsyncThunk<
+  WatchlistItem[],
+  void,
+  { state: RootState }
+>("loadWatchlist", async (_, thunkAPI): Promise<WatchlistItem[]> => {
+  const watchlistStr = await localStorageGet(STORAGE_KEY.WATCHLIST)
+  const watchlist = watchlistStr
+    ? (JSON.parse(watchlistStr) as WatchlistItem[])
+    : []
+
+  return watchlist
+})
 
 export const fetchAccountInfo = createAsyncThunk<
   AccountInfo,

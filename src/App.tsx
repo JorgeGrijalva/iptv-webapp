@@ -1,10 +1,4 @@
-import {
-  Box,
-  CssBaseline,
-  CssVarsProvider,
-  IconButton,
-  Typography,
-} from "@mui/joy"
+import { Box, CssBaseline, CssVarsProvider, IconButton } from "@mui/joy"
 import Layout from "./components/layout/Layout"
 import { ColorSchemeToggle } from "./components/common/ColorSchemeToggle"
 import { useEffect, useState } from "react"
@@ -76,9 +70,6 @@ function App() {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Typography component="h1" fontWeight="xl">
-                  My TV App
-                </Typography>
               </Box>
               <SearchInput />
               <Box
@@ -93,7 +84,7 @@ function App() {
                 <IconButton
                   size="sm"
                   variant="soft"
-                  sx={{ display: { sm: "inline-flex" } }}
+                  sx={{ display: { xs: "none", sm: "inline-flex" } }}
                 >
                   <GroupRoundedIcon />
                 </IconButton>

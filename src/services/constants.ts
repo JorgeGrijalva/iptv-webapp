@@ -6,4 +6,5 @@ export const STORAGE_KEY = {
   LIVE_STREAMS: "liveStreams",
   VOD_STREAMS: "vodStreams",
   SERIES_STREAMS: "seriesStreams",
+  WATCHLIST: "watchlist",
 }

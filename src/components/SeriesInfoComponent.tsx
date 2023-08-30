@@ -59,6 +59,8 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
   }
 
   const seasons = useCallback(() => {
+    // some providers send faulty API data with an empty seasons array
+    // so we have to compensate
     const seasons: SeriesSeason[] = []
 
     if (!info) return seasons
@@ -70,7 +72,10 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
     const seasonIds = Object.keys(info.episodes)
 
     for (const seasonId of seasonIds) {
-      seasons.push({ season_number: Number(seasonId) })
+      seasons.push({
+        season_number: Number(seasonId),
+        episode_count: info.episodes[seasonId].length,
+      })
     }
 
     return seasons

@@ -16,6 +16,7 @@ import {
   fetchVODStreamCategories,
   fetchVODStreams,
   loadApp,
+  loadWatchlist,
 } from "./thunks"
 import { localStorageSet } from "../../services/utils"
 import { STORAGE_KEY } from "../../services/constants"
@@ -68,6 +69,10 @@ export const appSlice = createSlice({
     },
     addItemToWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
       state.watchlist = [...state.watchlist, action.payload]
+      localStorageSet(
+        STORAGE_KEY.WATCHLIST,
+        JSON.stringify(state.watchlist),
+      ).catch(console.error)
     },
   },
   extraReducers: (builder) => {
@@ -85,6 +90,9 @@ export const appSlice = createSlice({
       .addCase(loadApp.rejected, (state, action) => {
         state.status = "needsAuth"
         console.log(action.error)
+      })
+      .addCase(loadWatchlist.fulfilled, (state, action) => {
+        state.watchlist = action.payload
       })
       .addCase(fetchAccountInfo.fulfilled, (state, action) => {
         state.accountInfo = action.payload

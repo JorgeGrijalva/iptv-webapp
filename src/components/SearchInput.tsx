@@ -52,7 +52,7 @@ export const SearchInput: FC = () => {
       sx={{
         flexBasis: "500px",
         display: {
-          xs: "none",
+          //xs: "none",
           sm: "flex",
         },
         boxShadow: "sm",

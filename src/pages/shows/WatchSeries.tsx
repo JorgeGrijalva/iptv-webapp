@@ -7,8 +7,9 @@ import {
 import Player from "video.js/dist/types/player"
 import { useAppSelector } from "../../store/hooks"
 import {
-  selectAppState,
+  selectAccountInfo,
   selectPreferredBaseUrl,
+  selectSeriesStreams,
 } from "../../store/app/selector"
 import { VideoPlayer } from "../../components/VideoPlayer"
 import videojs from "video.js"
@@ -18,7 +19,8 @@ import { containerToMimeType } from "../../services/utils"
 
 export const WatchSeries: FC = () => {
   const { id } = useParams()
-  const { accountInfo, seriesStreams } = useAppSelector(selectAppState)
+  const accountInfo = useAppSelector(selectAccountInfo)
+  const seriesStreams = useAppSelector(selectSeriesStreams)
   const [stream, setStream] = useState<SeriesStream | undefined>(undefined)
   const [selectedEpisode, setSelectedEpisode] = useState<
     SeriesEpisode | undefined

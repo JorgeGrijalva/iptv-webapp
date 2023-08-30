@@ -1,12 +1,16 @@
 import { FC, useState } from "react"
 import { SeriesStream } from "../services/XtremeCodesAPI.types"
 import { useAppSelector } from "../store/hooks"
-import { selectAppState } from "../store/app/selector"
+import {
+  selectSeriesCategories,
+  selectSeriesStreams,
+} from "../store/app/selector"
 import { MediaInfoModal } from "../components/MediaInfoModal"
 import { MediaVirtualizedList } from "../components/MediaVirtualizedList"
 
 export const TVSeries: FC = () => {
-  const { seriesCategories, seriesStreams } = useAppSelector(selectAppState)
+  const seriesStreams = useAppSelector(selectSeriesStreams)
+  const seriesCategories = useAppSelector(selectSeriesCategories)
   const [currentSeries, setCurrentSeries] = useState<SeriesStream | undefined>(
     undefined,
   )

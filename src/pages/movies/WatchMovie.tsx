@@ -3,8 +3,9 @@ import { useParams } from "react-router-dom"
 import { VideoPlayer } from "../../components/VideoPlayer"
 import { useAppSelector } from "../../store/hooks"
 import {
-  selectAppState,
+  selectAccountInfo,
   selectPreferredBaseUrl,
+  selectVodStreams,
 } from "../../store/app/selector"
 import { VodStream } from "../../services/XtremeCodesAPI.types"
 import Player from "video.js/dist/types/player"
@@ -15,7 +16,8 @@ import { Grid } from "@mui/joy"
 
 export const WatchMovie: FC = () => {
   const { id } = useParams()
-  const { accountInfo, vodStreams } = useAppSelector(selectAppState)
+  const vodStreams = useAppSelector(selectVodStreams)
+  const accountInfo = useAppSelector(selectAccountInfo)
   const [stream, setStream] = useState<VodStream | undefined>(undefined)
   const playerRef = useRef<Player | null>(null)
   const baseUrl = useAppSelector(selectPreferredBaseUrl)
