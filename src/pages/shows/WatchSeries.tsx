@@ -90,9 +90,10 @@ export const WatchSeries: FC = () => {
             overflow: "auto",
             height: "100%",
             width: "100%",
+            paddingBottom: 5,
           }}
         >
-          <Grid xs={12} sm={12} justifyContent="center" alignContent="center">
+          <Grid xs={12} sm={12}>
             <Typography
               justifyContent="center"
               alignContent="center"

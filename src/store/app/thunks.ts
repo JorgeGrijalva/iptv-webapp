@@ -41,7 +41,7 @@ export const loadApp = createAsyncThunk<
     vodStreams: VodStream[]
     seriesStreams: SeriesStream[]
   }> => {
-    thunkAPI.dispatch(loadWatchlist)
+    thunkAPI.dispatch(loadWatchlist())
 
     const apiConfig = await localStorageGet(STORAGE_KEY.API_CONFIG)
 

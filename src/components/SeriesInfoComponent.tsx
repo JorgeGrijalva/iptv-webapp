@@ -5,7 +5,7 @@ import {
   SeriesSeason,
   SeriesStream,
 } from "../services/XtremeCodesAPI.types"
-import { useAppDispatch } from "../store/hooks"
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { Loading } from "./layout/Loading"
 import { fetchSeriesInfo } from "../store/app/thunks"
 import {
@@ -21,6 +21,8 @@ import {
 } from "@mui/joy"
 import { ArrowDropDown } from "@mui/icons-material"
 import { EpisodesCarousel } from "./EpisodesCarousel"
+import { selectWatchlist } from "../store/app/selector"
+import { addToWatchlist, removeFromWatchlist } from "../store/app/appSlice"
 
 export interface SeriesInfoProps {
   series: SeriesStream
@@ -37,6 +39,7 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
     SeriesSeason | undefined
   >(undefined)
   const dispatch = useAppDispatch()
+  const watchlist = useAppSelector(selectWatchlist)
 
   useEffect(() => {
     if (!series || !series.series_id) return
@@ -56,6 +59,21 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
 
   const onEpisodeClick = (episode: SeriesEpisode) => {
     if (onSelectEpisode) onSelectEpisode(episode)
+  }
+
+  const toggleWatchlist = () => {
+    if (series.series_id === undefined) return
+
+    if (
+      watchlist.find(
+        (element) =>
+          element.id === series.series_id && element.type === "series",
+      )
+    ) {
+      dispatch(removeFromWatchlist({ id: series.series_id, type: "series" }))
+    } else {
+      dispatch(addToWatchlist({ id: series.series_id, type: "series" }))
+    }
   }
 
   const seasons = useCallback(() => {
@@ -158,8 +176,14 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
                   ))}
                 </Menu>
               </Dropdown>
-              <Button variant="solid" color="primary">
-                Add to Watchlist
+              <Button variant="solid" color="primary" onClick={toggleWatchlist}>
+                {watchlist.find(
+                  (element) =>
+                    element.id === series.series_id &&
+                    element.type === "series",
+                )
+                  ? "Remove from Watchlist"
+                  : "Add to Watchlist"}
               </Button>
               {playButton !== undefined && playButton}
             </ButtonGroup>

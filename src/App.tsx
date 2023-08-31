@@ -21,6 +21,7 @@ import { SearchInput } from "./components/SearchInput"
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded"
 import MenuIcon from "@mui/icons-material/Menu"
 import { SearchResults } from "./pages/SearchResults"
+import { Watchlist } from "./pages/Watchlist"
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -102,6 +103,7 @@ function App() {
                 <Route path={urls.tvShows} element={<TVSeries />} />
                 <Route path={urls.seriesWatch} element={<WatchSeries />} />
                 <Route path={urls.search} element={<SearchResults />} />
+                <Route path={urls.watchlist} element={<Watchlist />} />
               </Routes>
             </Layout.Main>
           </Layout.Root>

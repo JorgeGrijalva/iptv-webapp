@@ -1,10 +1,12 @@
 import { FC, useEffect, useState } from "react"
 import { VodInfo, VodStream } from "../services/XtremeCodesAPI.types"
 import { AspectRatio, Button, ButtonGroup, Grid, Typography } from "@mui/joy"
-import { useAppDispatch } from "../store/hooks"
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { fetchVODInfo } from "../store/app/thunks"
 import { YoutubeVideo } from "./YoutubeVideo"
 import { Loading } from "./layout/Loading"
+import { selectWatchlist } from "../store/app/selector"
+import { addToWatchlist, removeFromWatchlist } from "../store/app/appSlice"
 
 export interface VodInfoProps {
   vod: VodStream
@@ -16,6 +18,7 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
   const [info, setInfo] = useState<VodInfo | undefined>(undefined)
   const [trailerVisible, setTrailerVisible] = useState(false)
   const [state, setState] = useState<"loading" | "ready" | "error">("loading")
+  const watchlist = useAppSelector(selectWatchlist)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -34,6 +37,20 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
   }, [dispatch, vod])
 
   if (state === "loading") return <Loading />
+
+  const toggleWatchlist = () => {
+    if (vod.stream_id === undefined) return
+
+    if (
+      watchlist.find(
+        (element) => element.id === vod.stream_id && element.type === "vod",
+      )
+    ) {
+      dispatch(removeFromWatchlist({ id: vod.stream_id, type: "vod" }))
+    } else {
+      dispatch(addToWatchlist({ id: vod.stream_id, type: "vod" }))
+    }
+  }
 
   const showTrailer = trailerVisible && info?.info?.youtube_trailer
 
@@ -100,8 +117,13 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
             >
               Watch Trailer
             </Button>
-            <Button variant="solid" color="primary">
-              Add to Watchlist
+            <Button variant="solid" color="primary" onClick={toggleWatchlist}>
+              {watchlist.find(
+                (element) =>
+                  element.id === vod.stream_id && element.type === "vod",
+              )
+                ? "Remove from Watchlist"
+                : "Add to Watchlist"}
             </Button>
             {playButton !== undefined && playButton}
           </ButtonGroup>

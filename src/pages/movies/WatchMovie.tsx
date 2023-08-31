@@ -72,6 +72,8 @@ export const WatchMovie: FC = () => {
             gridTemplateRows: "1fr 1fr",
             overflow: "auto",
             height: "100%",
+            paddingBottom: 5,
+            //width: "100%",
           }}
         >
           <Grid xs={12} sm={12}>

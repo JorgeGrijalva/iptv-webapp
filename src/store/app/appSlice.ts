@@ -67,8 +67,20 @@ export const appSlice = createSlice({
     ) => {
       state.status = action.payload
     },
-    addItemToWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
-      state.watchlist = [...state.watchlist, action.payload]
+    addToWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
+      state.watchlist.push(action.payload)
+      localStorageSet(
+        STORAGE_KEY.WATCHLIST,
+        JSON.stringify(state.watchlist),
+      ).catch(console.error)
+    },
+    removeFromWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
+      const index = state.watchlist.findIndex(
+        (element) =>
+          element.id === action.payload.id &&
+          element.type === action.payload.type,
+      )
+      state.watchlist.splice(index, 1)
       localStorageSet(
         STORAGE_KEY.WATCHLIST,
         JSON.stringify(state.watchlist),
@@ -149,6 +161,11 @@ export const appSlice = createSlice({
   },
 })
 
-export const { setApiConfig, setAppStatus } = appSlice.actions
+export const {
+  setApiConfig,
+  setAppStatus,
+  removeFromWatchlist,
+  addToWatchlist,
+} = appSlice.actions
 
 export default appSlice.reducer

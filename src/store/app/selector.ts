@@ -43,6 +43,11 @@ export const selectSeriesCategories = createSelector(
   (app) => app.seriesCategories,
 )
 
+export const selectWatchlist = createSelector(
+  selectAppState,
+  (app) => app.watchlist,
+)
+
 export const selectPreferredBaseUrl = createSelector(
   selectAccountInfo,
   (accountInfo) =>
