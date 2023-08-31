@@ -13,7 +13,7 @@ import {
 } from "../../store/app/selector"
 import { VideoPlayer } from "../../components/VideoPlayer"
 import videojs from "video.js"
-import { Grid, Typography } from "@mui/joy"
+import { Box, Grid, Typography } from "@mui/joy"
 import { SeriesInfoComponent } from "../../components/SeriesInfoComponent"
 import { containerToMimeType } from "../../services/utils"
 
@@ -81,15 +81,11 @@ export const WatchSeries: FC = () => {
   return (
     <>
       {stream && (
-        <div
-          style={{
+        <Box
+          sx={{
             flexGrow: 1,
-            justifyContent: "center",
-            display: "grid",
-            gridTemplateRows: "1fr 1fr 1fr",
             overflow: "auto",
             height: "100%",
-            width: "100%",
             paddingBottom: 5,
           }}
         >
@@ -117,7 +113,7 @@ export const WatchSeries: FC = () => {
               selectedEpisode={selectedEpisode}
             />
           </Grid>
-        </div>
+        </Box>
       )}
       {!stream && <div>There was an error loadig that title</div>}
     </>

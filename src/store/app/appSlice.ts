@@ -67,6 +67,13 @@ export const appSlice = createSlice({
     ) => {
       state.status = action.payload
     },
+    removeAccount: (state) => {
+      localStorageSet(
+        STORAGE_KEY.API_CONFIG,
+        JSON.stringify(initialState.accountInfo),
+      )
+      state.status = "needsAuth"
+    },
     addToWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
       state.watchlist.push(action.payload)
       localStorageSet(
@@ -166,6 +173,7 @@ export const {
   setAppStatus,
   removeFromWatchlist,
   addToWatchlist,
+  removeAccount,
 } = appSlice.actions
 
 export default appSlice.reducer

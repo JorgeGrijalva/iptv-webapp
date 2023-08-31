@@ -12,7 +12,7 @@ import Player from "video.js/dist/types/player"
 import videojs from "video.js"
 import { containerToMimeType } from "../../services/utils"
 import { VodInfoComponent } from "../../components/VodInfoComponent"
-import { Grid } from "@mui/joy"
+import { Box, Grid } from "@mui/joy"
 
 export const WatchMovie: FC = () => {
   const { id } = useParams()
@@ -64,16 +64,12 @@ export const WatchMovie: FC = () => {
   return (
     <>
       {stream && (
-        <div
-          style={{
+        <Box
+          sx={{
             flexGrow: 1,
-            justifyContent: "center",
-            display: "grid",
-            gridTemplateRows: "1fr 1fr",
             overflow: "auto",
             height: "100%",
             paddingBottom: 5,
-            //width: "100%",
           }}
         >
           <Grid xs={12} sm={12}>
@@ -82,7 +78,7 @@ export const WatchMovie: FC = () => {
           <Grid>
             <VodInfoComponent vod={stream} />
           </Grid>
-        </div>
+        </Box>
       )}
       {!stream && <div>There was an error loadig that title</div>}
     </>

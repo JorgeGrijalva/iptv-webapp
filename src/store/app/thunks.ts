@@ -49,6 +49,14 @@ export const loadApp = createAsyncThunk<
 
     const config = JSON.parse(apiConfig) as XtremeCodesConfig
 
+    if (
+      ![config.auth.username, config.auth.password, config.baseUrl].every(
+        Boolean,
+      )
+    ) {
+      return Promise.reject("empty login details")
+    }
+
     // check if stored login details are valid
     try {
       await thunkAPI.dispatch(fetchAccountInfo({ config })).unwrap()

@@ -1,8 +1,10 @@
-import { FC } from "react"
+import { FC, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { selectAppState } from "../store/app/selector"
 import {
   Box,
+  Button,
+  ButtonGroup,
   Card,
   CardContent,
   Link,
@@ -11,9 +13,19 @@ import {
   styled,
 } from "@mui/joy"
 import { getDateForTimestamp } from "../services/utils"
-import { fetchAccountInfo } from "../store/app/thunks"
+import {
+  fetchAccountInfo,
+  fetchLiveStreamCategories,
+  fetchLiveStreams,
+  fetchSeriesStreamCategories,
+  fetchSeriesStreams,
+  fetchVODStreamCategories,
+  fetchVODStreams,
+} from "../store/app/thunks"
+import { removeAccount } from "../store/app/appSlice"
 
 export const Dashboard: FC = () => {
+  const [state, setState] = useState<"loading" | "ready">("ready")
   const {
     accountInfo,
     liveStreams,
@@ -30,12 +42,34 @@ export const Dashboard: FC = () => {
     dispatch(fetchAccountInfo({}))
   }
 
+  const refreshPlaylist = async () => {
+    setState("loading")
+    try {
+      await Promise.all([
+        dispatch(fetchLiveStreamCategories()).unwrap(),
+        dispatch(fetchVODStreamCategories()).unwrap(),
+        dispatch(fetchSeriesStreamCategories()).unwrap,
+        dispatch(fetchLiveStreams()).unwrap,
+        dispatch(fetchVODStreams()).unwrap(),
+        dispatch(fetchSeriesStreams()).unwrap(),
+      ])
+    } catch (e) {
+      console.log(e)
+    }
+    setState("ready")
+  }
+
+  const deleteAccount = () => {
+    dispatch(removeAccount())
+  }
+
   return (
     <Box
       sx={{
         width: "100%",
         height: "100%",
         overflow: "auto",
+        paddingBottom: 5,
       }}
     >
       <Card
@@ -198,17 +232,36 @@ export const Dashboard: FC = () => {
               </Typography>
             </div>
           </Sheet>
+          <ButtonGroup
+            spacing={5}
+            sx={{ justifyContent: "space-between", margin: 5 }}
+          >
+            <Button
+              variant="solid"
+              color="primary"
+              loading={state === "loading"}
+              loadingPosition="start"
+              onClick={refreshPlaylist}
+            >
+              Update playlist
+            </Button>
+            <Button variant="solid" color="danger" onClick={deleteAccount}>
+              Remove Account
+            </Button>
+          </ButtonGroup>
+          <div
+            style={{ display: "flex", justifyContent: "center", marginTop: 5 }}
+          >
+            <Typography>
+              Last refreshed:
+              {" " + new Date(lastFetchedAccountInfo).toLocaleTimeString()}
+            </Typography>
+            <Link sx={{ marginLeft: 2 }} onClick={refreshInfo}>
+              Refresh Account Information
+            </Link>
+          </div>
         </CardContent>
       </Card>
-      <div style={{ display: "flex", justifyContent: "center", marginTop: 5 }}>
-        <Typography>
-          Last refreshed:
-          {" " + new Date(lastFetchedAccountInfo).toLocaleTimeString()}
-        </Typography>
-        <Link sx={{ marginLeft: 2 }} onClick={refreshInfo}>
-          Refresh
-        </Link>
-      </div>
     </Box>
   )
 }

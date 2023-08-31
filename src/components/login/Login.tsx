@@ -147,9 +147,8 @@ export const Login: React.FC = () => {
 
         <Button
           sx={{ mt: 1 }}
-          startDecorator={
-            status !== "idle" && <CircularProgress variant="solid" />
-          }
+          loading={status !== "idle"}
+          loadingPosition="start"
           onClick={handleSubmit}
           disabled={!canSubmit}
         >
