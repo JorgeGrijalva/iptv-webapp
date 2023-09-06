@@ -93,6 +93,7 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
       seasons.push({
         season_number: Number(seasonId),
         episode_count: info.episodes[seasonId].length,
+        name: `Season ${seasonId}`,
       })
     }
 
@@ -222,6 +223,22 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
           </>
         )}
       </Grid>
+      {selectedEpisode && (
+        <Grid xs={12} sm={12} md={12}>
+          <Typography
+            component="h3"
+            id="modal-title"
+            level="h4"
+            textColor="inherit"
+            fontWeight="md"
+            justifyContent="center"
+            display="flex"
+          >
+            S{selectedEpisode.season}:E{selectedEpisode.episode_num} Plot
+          </Typography>
+          <Typography>{selectedEpisode.info?.plot}</Typography>
+        </Grid>
+      )}
     </Grid>
   )
 }

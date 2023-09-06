@@ -17,11 +17,11 @@ import { WatchMovie } from "./pages/movies/WatchMovie"
 import { TVSeries } from "./pages/TVSeries"
 import { WatchSeries } from "./pages/shows/WatchSeries"
 import { SearchInput } from "./components/SearchInput"
+import { SearchResults } from "./pages/SearchResults"
+import { Watchlist } from "./pages/Watchlist"
 
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded"
 import MenuIcon from "@mui/icons-material/Menu"
-import { SearchResults } from "./pages/SearchResults"
-import { Watchlist } from "./pages/Watchlist"
 
 function App() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -94,7 +94,7 @@ function App() {
             <Layout.SideNav>
               <Navigator />
             </Layout.SideNav>
-            <Layout.Main sx={{ height: "100vh" }}>
+            <Layout.Main sx={{ height: "100vh", overflow: "hidden" }}>
               <Routes>
                 <Route path={urls.home} element={<Dashboard />} />
                 <Route path={urls.liveTv} element={<LiveTV />} />

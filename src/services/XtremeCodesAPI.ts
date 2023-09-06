@@ -8,6 +8,7 @@ import {
   AccountInfo,
   VodInfo,
   SeriesInfo,
+  LiveStreamEPG,
 } from "./XtremeCodesAPI.types"
 
 export class XtremeCodesAPI {
@@ -111,7 +112,6 @@ export class XtremeCodesAPI {
     })
   }
 
-  // left off here types
   public static async getVODInfo(
     config: XtremeCodesConfig,
     id: number,
@@ -142,27 +142,33 @@ export class XtremeCodesAPI {
     return Promise.resolve(response)
   }
 
-  // left off here
   public static getEPGForLiveStream(
     config: XtremeCodesConfig,
     id: number,
-    limit: number,
-  ): Promise<any> {
+    limit?: number,
+  ): Promise<LiveStreamEPG> {
+    if (limit !== undefined) {
+      return this.execute(config, "get_short_epg", {
+        stream_id: id.toString(),
+        limit: limit.toString(),
+      })
+    }
+
     return this.execute(config, "get_short_epg", {
       stream_id: id.toString(),
-      limit: limit.toString(),
     })
   }
 
   public static getAllEPGForLiveStream(
     config: XtremeCodesConfig,
     id: number,
-  ): Promise<any> {
+  ): Promise<LiveStreamEPG> {
     return this.execute(config, "get_simple_data_table", {
       stream_id: id.toString(),
     })
   }
 
+  // returns xml file
   public static async getAllEPG(config: XtremeCodesConfig): Promise<any> {
     const query = { ...config.auth }
     const response = await fetch(

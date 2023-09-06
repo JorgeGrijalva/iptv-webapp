@@ -1,25 +1,32 @@
 import JoyMenu, { MenuActions } from "@mui/joy/Menu"
 import MenuItem from "@mui/joy/MenuItem"
 import { ListActionTypes } from "@mui/base/useList"
-import React from "react"
+import {
+  FC,
+  Fragment,
+  cloneElement,
+  useCallback,
+  useRef,
+  useState,
+} from "react"
 
-function Menu({
-  control,
-  menus,
-  id,
-}: {
+export interface MenuProps {
   control: React.ReactElement
   id: string
   menus: Array<{ label: string } & { [k: string]: any }>
-}) {
-  const [buttonElement, setButtonElement] =
-    React.useState<HTMLButtonElement | null>(null)
-  const [isOpen, setOpen] = React.useState(false)
-  const buttonRef = React.useRef<HTMLButtonElement>(null)
-  const menuActions = React.useRef<MenuActions>(null)
-  const preventReopen = React.useRef(false)
+}
 
-  const updateAnchor = React.useCallback((node: HTMLButtonElement | null) => {
+const Menu: FC<MenuProps> = (props) => {
+  const [buttonElement, setButtonElement] = useState<HTMLButtonElement | null>(
+    null,
+  )
+  const [isOpen, setOpen] = useState(false)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const menuActions = useRef<MenuActions>(null)
+  const preventReopen = useRef(false)
+  const { control, id, menus } = props
+
+  const updateAnchor = useCallback((node: HTMLButtonElement | null) => {
     setButtonElement(node)
   }, [])
 
@@ -55,8 +62,8 @@ function Menu({
   }
 
   return (
-    <React.Fragment>
-      {React.cloneElement(control, {
+    <Fragment>
+      {cloneElement(control, {
         type: "button",
         onClick: handleButtonClick,
         onKeyDown: handleButtonKeyDown,
@@ -88,14 +95,14 @@ function Menu({
           if (item.href) {
             return (
               <li key={label} role="none">
-                {React.cloneElement(menuItem, { component: "a" })}
+                {cloneElement(menuItem, { component: "a" })}
               </li>
             )
           }
-          return React.cloneElement(menuItem, { key: label })
+          return cloneElement(menuItem, { key: label })
         })}
       </JoyMenu>
-    </React.Fragment>
+    </Fragment>
   )
 }
 

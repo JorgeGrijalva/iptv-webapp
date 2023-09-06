@@ -34,6 +34,10 @@ export const VideoPlayer: FC<VideoPlayerProps> = (props) => {
     } else {
       const player = playerRef.current
 
+      if (player.currentSrc() === options.sources[0].src) {
+        videojs.log("not changed source")
+        return
+      }
       //player.autoplay(options.autoplay)
       player.options(options)
       player.updateSourceCaches_(options.sources)

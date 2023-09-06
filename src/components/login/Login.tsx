@@ -1,7 +1,6 @@
 import {
   Alert,
   Button,
-  CircularProgress,
   FormControl,
   FormLabel,
   Input,
@@ -73,8 +72,8 @@ export const Login: React.FC = () => {
       await Promise.all([
         dispatch(fetchLiveStreamCategories()).unwrap(),
         dispatch(fetchVODStreamCategories()).unwrap(),
-        dispatch(fetchSeriesStreamCategories()).unwrap,
-        dispatch(fetchLiveStreams()).unwrap,
+        dispatch(fetchSeriesStreamCategories()).unwrap(),
+        dispatch(fetchLiveStreams()).unwrap(),
         dispatch(fetchVODStreams()).unwrap(),
         dispatch(fetchSeriesStreams()).unwrap(),
       ])

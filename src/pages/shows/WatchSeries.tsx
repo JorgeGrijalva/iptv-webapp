@@ -15,7 +15,7 @@ import { VideoPlayer } from "../../components/VideoPlayer"
 import videojs from "video.js"
 import { Box, Grid, Typography } from "@mui/joy"
 import { SeriesInfoComponent } from "../../components/SeriesInfoComponent"
-import { containerToMimeType } from "../../services/utils"
+import { containerToMimeType, getEpisodeUrl } from "../../services/utils"
 
 export const WatchSeries: FC = () => {
   const { id } = useParams()
@@ -47,10 +47,13 @@ export const WatchSeries: FC = () => {
       fluid: true,
       sources: [
         {
-          src: `${baseUrl}/series/${accountInfo.user_info?.username}/${accountInfo.user_info?.password}/${selectedEpisode?.id}.${selectedEpisode?.container_extension}`,
-          type: `video/${containerToMimeType(
-            selectedEpisode?.container_extension ?? "",
-          )}`,
+          src: getEpisodeUrl(
+            baseUrl,
+            accountInfo.user_info?.username ?? "",
+            accountInfo.user_info?.password ?? "",
+            `${selectedEpisode?.id}.${selectedEpisode?.container_extension}`,
+          ),
+          type: containerToMimeType(selectedEpisode?.container_extension ?? ""),
         },
       ],
       poster: selectedEpisode?.info?.movie_image,
@@ -89,29 +92,31 @@ export const WatchSeries: FC = () => {
             paddingBottom: 5,
           }}
         >
-          <Grid xs={12} sm={12}>
-            <Typography
-              justifyContent="center"
-              alignContent="center"
-              textAlign="center"
-            >
-              {selectedEpisode?.title ?? stream.name}
-            </Typography>
-          </Grid>
-          {selectedEpisode && (
+          <Grid container>
             <Grid xs={12} sm={12}>
-              <VideoPlayer
-                options={videoJsOptions()}
-                onReady={handlePlayerReady}
+              <Typography
+                justifyContent="center"
+                alignContent="center"
+                textAlign="center"
+              >
+                {selectedEpisode?.title ?? stream.name}
+              </Typography>
+            </Grid>
+            {selectedEpisode && (
+              <Grid xs={12} sm={12}>
+                <VideoPlayer
+                  options={videoJsOptions()}
+                  onReady={handlePlayerReady}
+                />
+              </Grid>
+            )}
+            <Grid>
+              <SeriesInfoComponent
+                series={stream}
+                onSelectEpisode={onSelectEpisode}
+                selectedEpisode={selectedEpisode}
               />
             </Grid>
-          )}
-          <Grid>
-            <SeriesInfoComponent
-              series={stream}
-              onSelectEpisode={onSelectEpisode}
-              selectedEpisode={selectedEpisode}
-            />
           </Grid>
         </Box>
       )}

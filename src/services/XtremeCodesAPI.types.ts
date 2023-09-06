@@ -152,15 +152,18 @@ export interface SeriesEpisode {
   title?: string
   container_extension?: string
   info?: {
+    tmdb_id?: number
     air_date?: string
     rating?: number
-    id?: number
+    season?: number
+    plot?: string
     movie_image?: string
     duration_secs?: number
     duration?: string
     video?: VideoInformation
     audio?: AudioInformation
     bitrate?: number
+    release_date?: string
   }
   custom_sid?: string
   added?: number
@@ -276,3 +279,23 @@ export interface AudioInformation {
 }
 
 export type CodecType = "audio" | "video"
+
+export interface LiveStreamEPG {
+  epg_listings?: LiveStreamEPGItem[]
+}
+
+export interface LiveStreamEPGItem {
+  id?: number
+  epg_id?: number
+  title?: string
+  lang?: string
+  start?: string
+  end?: string
+  description?: string
+  channel_id?: string
+  start_timestamp?: number
+  stop_timestamp?: number
+  now_playing?: number
+  has_archive?: number
+  stream_id?: number
+}

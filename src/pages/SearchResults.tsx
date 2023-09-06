@@ -45,7 +45,7 @@ export const SearchResults: FC = () => {
           stream={selectedTitle}
         />
       )}
-      <div style={{ overflow: "auto" }}>
+      <div style={{ overflow: "auto", paddingBottom: 50, height: "100%" }}>
         {query && (
           <>
             <div style={{ height: 315 }}>
@@ -56,11 +56,15 @@ export const SearchResults: FC = () => {
               >
                 Movies
               </Typography>
-              <MediaCarousel
-                items={filteredMovies()}
-                onStreamClick={onStreamClick}
-                key={query}
-              />
+              {filteredMovies().length > 0 ? (
+                <MediaCarousel
+                  items={filteredMovies()}
+                  onStreamClick={onStreamClick}
+                  key={query}
+                />
+              ) : (
+                <Typography>No results</Typography>
+              )}
             </div>
             <div style={{ height: 315 }}>
               <Typography
@@ -70,11 +74,15 @@ export const SearchResults: FC = () => {
               >
                 Series
               </Typography>
-              <MediaCarousel
-                items={filteredSeries()}
-                onStreamClick={onStreamClick}
-                key={query}
-              />
+              {filteredSeries().length > 0 ? (
+                <MediaCarousel
+                  items={filteredSeries()}
+                  onStreamClick={onStreamClick}
+                  key={query}
+                />
+              ) : (
+                <Typography>No results</Typography>
+              )}
             </div>
           </>
         )}

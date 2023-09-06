@@ -21,21 +21,58 @@ export const isVod = (
   return (stream as VodStream).stream_id !== undefined
 }
 
+export const getVodUrl = (
+  baseUrl: string,
+  username: string,
+  password: string,
+  filename: string,
+) => {
+  return `${baseUrl}/movie/${username}/${password}/${filename}`
+}
+
+export const getEpisodeUrl = (
+  baseUrl: string,
+  username: string,
+  password: string,
+  filename: string,
+) => {
+  return `${baseUrl}/series/${username}/${password}/${filename}`
+}
+
+export const getLiveUrl = (
+  baseUrl: string,
+  username: string,
+  password: string,
+  id: string,
+  format: string,
+) => {
+  return `${baseUrl}/live/${username}/${password}/${id}.${format}`
+}
+
 export const containerToMimeType = (container: string): string => {
   switch (container) {
     case "mkv":
-      return "webm"
+      return "video/webm"
+    case "mp4":
+    case "mov":
+    case "m4v":
+      return "video/mp4"
     case "avi":
-      return "x-msvideo"
+      return "video/x-msvideo"
     case "3gp":
-      return "3gpp"
-    case ".mpg":
+      return "video/3gpp"
+    case "mpg":
     case "mpeg":
-      return "mpeg"
+      return "video/mpeg"
     case "ogg":
     case "ogv":
-      return "ogg"
+    case "opus":
+      return "video/ogg"
+    case "mpd":
+      return "application/dash+xml"
+    case "m3u8":
+      return "application/x-mpegURL"
     default:
-      return container
+      return `video/${container}`
   }
 }

@@ -1,17 +1,16 @@
-# vite-template-redux
+# IPTV WebApp
 
-Uses [Vite](https://vitejs.dev/), [Vitest](https://vitest.dev/), and [React Testing Library](https://github.com/testing-library/react-testing-library) to create a modern [React](https://react.dev/) app compatible with [Create React App](https://create-react-app.dev/)
+A modern [React](https://react.dev/) webapp that faciliates interacting with any Xtream Codes API backend
 
-```sh
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
-```
+**NOTE: This application does not provide any media, and only displays data from the user provided Xtream Codes API url**
 
 ## Goals
 
-- Easy migration from Create React App or Vite
-- As beginner friendly as Create React App
-- Optimized performance compared to Create React App
-- Customizable without ejecting
+- Use redux + local storage to minimize API calls
+- Play browser-compatible media in the browser
+- Easy to use interface for searching, browsing, and viewing media
+- Compatible with any Xtream Codes API backend
+- No additional proxy server needed, all application logic runs entirely on the browser and interacts directly with Xtream Codes API
 
 ## Scripts
 
@@ -19,9 +18,3 @@ npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
 - `build` - build for production
 - `preview` - locally preview production build
 - `test` - launch test runner
-
-## Inspiration
-
-- [Create React App](https://github.com/facebook/create-react-app/tree/main/packages/cra-template)
-- [Vite](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react)
-- [Vitest](https://github.com/vitest-dev/vitest/tree/main/examples/react-testing-lib)

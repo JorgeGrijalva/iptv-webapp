@@ -48,8 +48,8 @@ export const Dashboard: FC = () => {
       await Promise.all([
         dispatch(fetchLiveStreamCategories()).unwrap(),
         dispatch(fetchVODStreamCategories()).unwrap(),
-        dispatch(fetchSeriesStreamCategories()).unwrap,
-        dispatch(fetchLiveStreams()).unwrap,
+        dispatch(fetchSeriesStreamCategories()).unwrap(),
+        dispatch(fetchLiveStreams()).unwrap(),
         dispatch(fetchVODStreams()).unwrap(),
         dispatch(fetchSeriesStreams()).unwrap(),
       ])
@@ -236,6 +236,9 @@ export const Dashboard: FC = () => {
             spacing={5}
             sx={{ justifyContent: "space-between", margin: 5 }}
           >
+            <Button variant="solid" color="danger" onClick={deleteAccount}>
+              Sign out
+            </Button>
             <Button
               variant="solid"
               color="primary"
@@ -244,9 +247,6 @@ export const Dashboard: FC = () => {
               onClick={refreshPlaylist}
             >
               Update playlist
-            </Button>
-            <Button variant="solid" color="danger" onClick={deleteAccount}>
-              Remove Account
             </Button>
           </ButtonGroup>
           <div

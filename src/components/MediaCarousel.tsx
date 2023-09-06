@@ -136,12 +136,7 @@ export const MediaCarousel: FC<MediaCarouselProps> = (props) => {
             />
             <CardContent sx={{ justifyContent: "flex-end", height: 40 }}>
               <div style={{ display: "grid", gridTemplateRows: "30px 10px" }}>
-                <Typography
-                  level="title-lg"
-                  textColor="#fff"
-                  textOverflow="ellipsis"
-                  overflow="clip"
-                >
+                <Typography level="title-lg" textColor="#fff" noWrap>
                   <Link
                     overlay
                     underline="none"

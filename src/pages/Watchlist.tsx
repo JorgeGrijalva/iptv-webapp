@@ -99,12 +99,7 @@ export const Watchlist: FC = () => {
                   <div
                     style={{ display: "grid", gridTemplateRows: "30px 10px" }}
                   >
-                    <Typography
-                      level="title-lg"
-                      textColor="#fff"
-                      textOverflow="ellipsis"
-                      overflow="clip"
-                    >
+                    <Typography level="title-lg" textColor="#fff" noWrap>
                       <Link
                         overlay
                         underline="none"

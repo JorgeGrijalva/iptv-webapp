@@ -1,12 +1,12 @@
-import React from "react"
+import { FC, ReactNode } from "react"
 
 interface DisplayIfProps {
-  children: React.ReactNode
+  children: ReactNode
   expr: boolean
   onElse?: JSX.Element
 }
 
-export const DisplayIf: React.FC<DisplayIfProps> = (props) => {
+export const DisplayIf: FC<DisplayIfProps> = (props) => {
   if (props.expr) {
     return <>{props.children}</>
   }

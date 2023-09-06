@@ -10,7 +10,7 @@ import {
 import { VodStream } from "../../services/XtremeCodesAPI.types"
 import Player from "video.js/dist/types/player"
 import videojs from "video.js"
-import { containerToMimeType } from "../../services/utils"
+import { containerToMimeType, getVodUrl } from "../../services/utils"
 import { VodInfoComponent } from "../../components/VodInfoComponent"
 import { Box, Grid } from "@mui/joy"
 
@@ -30,9 +30,6 @@ export const WatchMovie: FC = () => {
     setStream(stream)
   }, [id, vodStreams])
 
-  const url = () =>
-    `${baseUrl}/movie/${accountInfo.user_info?.username}/${accountInfo.user_info?.password}/${id}.${stream?.container_extension}`
-
   const videoJsOptions = {
     autoplay: false,
     controls: true,
@@ -40,8 +37,13 @@ export const WatchMovie: FC = () => {
     fluid: true,
     sources: [
       {
-        src: url(),
-        type: `video/${containerToMimeType(stream?.container_extension ?? "")}`,
+        src: getVodUrl(
+          baseUrl,
+          accountInfo.user_info?.username ?? "",
+          accountInfo.user_info?.password ?? "",
+          `${id}.${stream?.container_extension}`,
+        ),
+        type: containerToMimeType(stream?.container_extension ?? ""),
       },
     ],
     poster: stream?.stream_icon,
@@ -62,25 +64,25 @@ export const WatchMovie: FC = () => {
   }
 
   return (
-    <>
+    <Box
+      sx={{
+        flexGrow: 1,
+        overflow: "auto",
+        height: "100%",
+        paddingBottom: 5,
+      }}
+    >
       {stream && (
-        <Box
-          sx={{
-            flexGrow: 1,
-            overflow: "auto",
-            height: "100%",
-            paddingBottom: 5,
-          }}
-        >
+        <Grid container>
           <Grid xs={12} sm={12}>
             <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} />
           </Grid>
           <Grid>
             <VodInfoComponent vod={stream} />
           </Grid>
-        </Box>
+        </Grid>
       )}
       {!stream && <div>There was an error loadig that title</div>}
-    </>
+    </Box>
   )
 }

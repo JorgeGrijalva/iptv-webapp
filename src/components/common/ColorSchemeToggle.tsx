@@ -1,12 +1,12 @@
 import { IconButton, useColorScheme } from "@mui/joy"
-import React from "react"
+import { FC, useEffect, useState } from "react"
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded"
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded"
 
-export function ColorSchemeToggle() {
+export const ColorSchemeToggle: FC = () => {
   const { mode, setMode } = useColorScheme()
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
     setMounted(true)
   }, [])
   if (!mounted) {
