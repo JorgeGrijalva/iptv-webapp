@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardCover,
-  Grid,
-  Link,
-  Typography,
-} from "@mui/joy"
+import { Box, Grid } from "@mui/joy"
 import { FC, useCallback, useState } from "react"
 import { useAppSelector } from "../store/hooks"
 import {
@@ -15,8 +7,8 @@ import {
   selectWatchlist,
 } from "../store/app/selector"
 import { SeriesStream, VodStream } from "../services/XtremeCodesAPI.types"
-import { isVod } from "../services/utils"
 import { MediaInfoModal } from "../components/MediaInfoModal"
+import { MediaCard } from "../components/MediaCard"
 
 export const Watchlist: FC = () => {
   const watchlist = useAppSelector(selectWatchlist)
@@ -69,53 +61,7 @@ export const Watchlist: FC = () => {
               alignItems="center"
               minHeight={300}
             >
-              <Card
-                sx={{
-                  height: 300,
-                  margin: 1,
-                  flexGrow: 1,
-                  "&:hover": {
-                    boxShadow: "md",
-                    outline: "#fff solid 2px",
-                    backgroundColor:
-                      "var(--joy-palette-neutral-outlinedHoverBg, var(--joy-palette-neutral-100, #EAEEF6))",
-                  },
-                }}
-              >
-                <CardCover>
-                  <img
-                    src={isVod(item) ? item.stream_icon : item.cover}
-                    loading="lazy"
-                    alt=""
-                  />
-                </CardCover>
-                <CardCover
-                  sx={{
-                    background:
-                      "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
-                  }}
-                />
-                <CardContent sx={{ justifyContent: "flex-end", height: 40 }}>
-                  <div
-                    style={{ display: "grid", gridTemplateRows: "30px 10px" }}
-                  >
-                    <Typography level="title-lg" textColor="#fff" noWrap>
-                      <Link
-                        overlay
-                        underline="none"
-                        textColor="inherit"
-                        textOverflow="ellipsis"
-                        onClick={() => setSelectedStream(item)}
-                      >
-                        {item.name}
-                      </Link>
-                    </Typography>
-                    <Typography level="body-sm" textColor="neutral.300">
-                      {item.rating}/10
-                    </Typography>
-                  </div>
-                </CardContent>
-              </Card>
+              <MediaCard onStreamClick={setSelectedStream} stream={item} />
             </Grid>
           ))}
         </Grid>

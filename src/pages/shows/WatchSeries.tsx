@@ -6,27 +6,26 @@ import {
 } from "../../services/XtremeCodesAPI.types"
 import Player from "video.js/dist/types/player"
 import { useAppSelector } from "../../store/hooks"
-import {
-  selectAccountInfo,
-  selectPreferredBaseUrl,
-  selectSeriesStreams,
-} from "../../store/app/selector"
+import { selectSeriesStreams } from "../../store/app/selector"
 import { VideoPlayer } from "../../components/VideoPlayer"
 import videojs from "video.js"
 import { Box, Grid, Typography } from "@mui/joy"
 import { SeriesInfoComponent } from "../../components/SeriesInfoComponent"
-import { containerToMimeType, getEpisodeUrl } from "../../services/utils"
+import { containerToMimeType } from "../../services/utils"
+import { useEpisodeUrl } from "../../components/useMediaUrl"
 
 export const WatchSeries: FC = () => {
   const { id } = useParams()
-  const accountInfo = useAppSelector(selectAccountInfo)
   const seriesStreams = useAppSelector(selectSeriesStreams)
   const [stream, setStream] = useState<SeriesStream | undefined>(undefined)
   const [selectedEpisode, setSelectedEpisode] = useState<
     SeriesEpisode | undefined
   >(undefined)
   const playerRef = useRef<Player | null>(null)
-  const baseUrl = useAppSelector(selectPreferredBaseUrl)
+  const url = useEpisodeUrl(
+    selectedEpisode?.id ?? 0,
+    selectedEpisode?.container_extension ?? "",
+  )
 
   useEffect(() => {
     const stream = seriesStreams.find(
@@ -47,18 +46,13 @@ export const WatchSeries: FC = () => {
       fluid: true,
       sources: [
         {
-          src: getEpisodeUrl(
-            baseUrl,
-            accountInfo.user_info?.username ?? "",
-            accountInfo.user_info?.password ?? "",
-            `${selectedEpisode?.id}.${selectedEpisode?.container_extension}`,
-          ),
+          src: url,
           type: containerToMimeType(selectedEpisode?.container_extension ?? ""),
         },
       ],
       poster: selectedEpisode?.info?.movie_image,
     }
-  }, [accountInfo, baseUrl, selectedEpisode])
+  }, [selectedEpisode, url])
 
   const handlePlayerReady = (player: Player) => {
     playerRef.current = player

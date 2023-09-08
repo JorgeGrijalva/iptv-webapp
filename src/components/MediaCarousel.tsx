@@ -1,23 +1,21 @@
 import { FC, useCallback, useMemo, useState } from "react"
-import { SeriesStream, VodStream } from "../services/XtremeCodesAPI.types"
+import {
+  LiveStream,
+  SeriesStream,
+  VodStream,
+} from "../services/XtremeCodesAPI.types"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { useTheme } from "@mui/material/styles"
-import {
-  Box,
-  Card,
-  CardContent,
-  CardCover,
-  IconButton,
-  Link,
-  Typography,
-} from "@mui/joy"
-import { isVod } from "../services/utils"
+import { Box, IconButton } from "@mui/joy"
+import { MediaCard } from "./MediaCard"
+import { isLive, isSeries } from "../services/utils"
+import { ChannelCard } from "./ChannelCard"
 
 export interface MediaCarouselProps {
-  items: (VodStream | SeriesStream)[]
-  onStreamClick: (stream: VodStream | SeriesStream) => void
+  items: (VodStream | SeriesStream | LiveStream)[]
+  onStreamClick: (stream: VodStream | SeriesStream | LiveStream) => void
 }
 
 export const MediaCarousel: FC<MediaCarouselProps> = (props) => {
@@ -107,53 +105,18 @@ export const MediaCarousel: FC<MediaCarouselProps> = (props) => {
           width: "100%",
         }}
       >
-        {pageItems.map((item) => (
-          <Card
-            sx={{
-              margin: 1,
-              flexGrow: 1,
-              "&:hover": {
-                boxShadow: "md",
-                outline: "#fff solid 2px",
-                backgroundColor:
-                  "var(--joy-palette-neutral-outlinedHoverBg, var(--joy-palette-neutral-100, #EAEEF6))",
-              },
-            }}
-            key={isVod(item) ? item.stream_id : item.series_id}
-          >
-            <CardCover>
-              <img
-                src={isVod(item) ? item.stream_icon : item.cover}
-                loading="lazy"
-                alt=""
+        {pageItems.map((item) => {
+          if (isLive(item))
+            return <ChannelCard stream={item} onStreamClick={onStreamClick} />
+          else
+            return (
+              <MediaCard
+                onStreamClick={onStreamClick}
+                stream={item}
+                key={isSeries(item) ? item.series_id : item.stream_id}
               />
-            </CardCover>
-            <CardCover
-              sx={{
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0) 200px), linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0) 300px)",
-              }}
-            />
-            <CardContent sx={{ justifyContent: "flex-end", height: 40 }}>
-              <div style={{ display: "grid", gridTemplateRows: "30px 10px" }}>
-                <Typography level="title-lg" textColor="#fff" noWrap>
-                  <Link
-                    overlay
-                    underline="none"
-                    textColor="inherit"
-                    textOverflow="ellipsis"
-                    onClick={() => onStreamClick(item)}
-                  >
-                    {item.name}
-                  </Link>
-                </Typography>
-                <Typography level="body-sm" textColor="neutral.300">
-                  {item.rating}/10
-                </Typography>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+            )
+        })}
       </Box>
       <IconButton
         variant="outlined"

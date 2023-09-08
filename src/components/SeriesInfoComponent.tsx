@@ -23,6 +23,7 @@ import { ArrowDropDown } from "@mui/icons-material"
 import { EpisodesCarousel } from "./EpisodesCarousel"
 import { selectWatchlist } from "../store/app/selector"
 import { addToWatchlist, removeFromWatchlist } from "../store/app/appSlice"
+import { useEpisodeUrl } from "./useMediaUrl"
 
 export interface SeriesInfoProps {
   series: SeriesStream
@@ -40,6 +41,10 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
   >(undefined)
   const dispatch = useAppDispatch()
   const watchlist = useAppSelector(selectWatchlist)
+  const url = useEpisodeUrl(
+    selectedEpisode?.id ?? 0,
+    selectedEpisode?.container_extension ?? "",
+  )
 
   useEffect(() => {
     if (!series || !series.series_id) return
@@ -106,6 +111,11 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
     )
     setSelectedSeason(firstSeason)
   }, [seasons])
+
+  const onClickCopy = async () => {
+    await navigator.clipboard.writeText(url) // todo: fix bc this shit wont work on http site
+    console.log(url)
+  }
 
   if (state === "loading") return <Loading />
 
@@ -187,6 +197,15 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
                   : "Add to Watchlist"}
               </Button>
               {playButton !== undefined && playButton}
+              {selectedEpisode && (
+                <Button
+                  variant="soft"
+                  color="neutral"
+                  onClick={() => onClickCopy()}
+                >
+                  {`Copy S${selectedSeason?.season_number}E${selectedEpisode?.episode_num} Video Url`}
+                </Button>
+              )}
             </ButtonGroup>
           </div>
         )}

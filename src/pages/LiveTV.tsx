@@ -1,55 +1,79 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { useAppSelector } from "../store/hooks"
+import { selectLiveCategories, selectLiveStreams } from "../store/app/selector"
 import {
-  selectAccountInfo,
-  selectLiveCategories,
-  selectLiveStreams,
-  selectPreferredBaseUrl,
-} from "../store/app/selector"
-import {
-  AspectRatio,
   Box,
   Grid,
   List,
   ListItem,
   ListItemButton,
   ListItemContent,
-  ListItemDecorator,
   Sheet,
 } from "@mui/joy"
 import { Category, LiveStream } from "../services/XtremeCodesAPI.types"
 import { KeyboardArrowRight } from "@mui/icons-material"
-import { containerToMimeType, getLiveUrl } from "../services/utils"
+import { containerToMimeType } from "../services/utils"
 import videojs from "video.js"
 import Player from "video.js/dist/types/player"
 import { VideoPlayer } from "../components/VideoPlayer"
+import { ChannelCard } from "../components/ChannelCard"
+import { useSearchParams } from "react-router-dom"
+import { useChannelUrl } from "../components/useMediaUrl"
 
 export const LiveTV: FC = () => {
   const liveStreams = useAppSelector(selectLiveStreams)
   const liveStreamCategories = useAppSelector(selectLiveCategories)
-  const accountInfo = useAppSelector(selectAccountInfo)
-  const baseUrl = useAppSelector(selectPreferredBaseUrl)
   const [selectedStream, setSelectedStream] = useState<LiveStream | undefined>(
     undefined,
   )
   const [selectedCategory, setSelectedCategory] = useState<
     Category | undefined
   >(undefined)
+  const [searchParams, setSearchParams] = useSearchParams()
   const playerRef = useRef<Player | null>(null)
+  const url = useChannelUrl(selectedStream?.stream_id ?? 0, "m3u8")
 
   console.log(liveStreams)
+
+  const channelId = searchParams.get("channel")
 
   useEffect(() => {
     const firstCategory = liveStreamCategories.find(
       (item) => item.category_id !== undefined,
     )
+
+    if (channelId) {
+      const stream = liveStreams.find(
+        (stream) => stream.stream_id === Number(channelId),
+      )
+      if (stream) {
+        setSelectedStream(stream)
+        const category = liveStreamCategories.find(
+          (category) => category.category_id === stream.category_id,
+        )
+        if (category) setSelectedCategory(category)
+        else setSelectedCategory(firstCategory)
+      }
+      return
+    }
+
     setSelectedCategory(firstCategory)
+
     setSelectedStream(
       liveStreams.filter(
         (stream) => stream.category_id === firstCategory?.category_id,
       )[0],
     )
-  }, [liveStreamCategories, liveStreams])
+  }, [channelId, liveStreamCategories, liveStreams])
+
+  const onStreamClick = (stream: LiveStream) => {
+    if (stream.stream_id === undefined) return
+
+    setSearchParams((prev) => {
+      prev.set("channel", stream.stream_id!.toString())
+      return prev
+    })
+  }
 
   const categoryLiveStreams = useCallback(() => {
     return liveStreams.filter(
@@ -66,18 +90,12 @@ export const LiveTV: FC = () => {
       fluid: true,
       sources: [
         {
-          src: getLiveUrl(
-            baseUrl,
-            accountInfo.user_info?.username ?? "",
-            accountInfo.user_info?.password ?? "",
-            `${selectedStream?.stream_id}`,
-            "m3u8",
-          ),
+          src: url,
           type: containerToMimeType("m3u8"),
         },
       ],
     }
-  }, [accountInfo, baseUrl, selectedStream])
+  }, [url])
 
   const handlePlayerReady = (player: Player) => {
     playerRef.current = player
@@ -140,28 +158,35 @@ export const LiveTV: FC = () => {
               sx={{ borderRadius: "sm", overflow: "auto", maxHeight: "500px" }}
             >
               {categoryLiveStreams().map((liveStream) => (
-                <ListItem key={liveStream.stream_id} sx={{ height: "100px" }}>
-                  <ListItemDecorator></ListItemDecorator>
-                  <ListItemButton
-                    onClick={() => setSelectedStream(liveStream)}
-                    selected={selectedStream === liveStream}
-                  >
-                    <AspectRatio
-                      objectFit="cover"
-                      variant="plain"
+                <ListItem key={liveStream.stream_id}>
+                  <ListItemContent>
+                    <Grid
+                      container
                       sx={{
-                        width: "100px",
-                        height: "100px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignContent: "center",
+                        "--Grid-borderWidth": "1px",
+                        borderTop: "var(--Grid-borderWidth) solid",
+                        //borderLeft: "var(--Grid-borderWidth) solid",
+                        borderBottom: "var(--Grid-borderWidth) solid",
+                        borderColor: "divider",
+                        "& > div": {
+                          borderRight: "var(--Grid-borderWidth) solid",
+                          //borderBottom: "var(--Grid-borderWidth) solid",
+                          borderColor: "divider",
+                        },
+                        gap: 0,
                       }}
                     >
-                      <img src={liveStream.stream_icon} alt="" />
-                    </AspectRatio>
-                    {liveStream.name}
-                  </ListItemButton>
-                  <ListItemContent></ListItemContent>
+                      <Grid sm={2}>
+                        <ChannelCard
+                          stream={liveStream}
+                          onStreamClick={(stream) => onStreamClick(liveStream)}
+                        />
+                      </Grid>
+                      <Grid sm={10}>
+                        <div>stuff here</div>
+                      </Grid>
+                    </Grid>
+                  </ListItemContent>
                 </ListItem>
               ))}
             </List>

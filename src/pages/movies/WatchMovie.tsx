@@ -2,25 +2,20 @@ import { FC, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 import { VideoPlayer } from "../../components/VideoPlayer"
 import { useAppSelector } from "../../store/hooks"
-import {
-  selectAccountInfo,
-  selectPreferredBaseUrl,
-  selectVodStreams,
-} from "../../store/app/selector"
+import { selectVodStreams } from "../../store/app/selector"
 import { VodStream } from "../../services/XtremeCodesAPI.types"
 import Player from "video.js/dist/types/player"
 import videojs from "video.js"
-import { containerToMimeType, getVodUrl } from "../../services/utils"
+import { containerToMimeType } from "../../services/utils"
 import { VodInfoComponent } from "../../components/VodInfoComponent"
 import { Box, Grid } from "@mui/joy"
+import { useVodUrl } from "../../components/useMediaUrl"
 
 export const WatchMovie: FC = () => {
   const { id } = useParams()
   const vodStreams = useAppSelector(selectVodStreams)
-  const accountInfo = useAppSelector(selectAccountInfo)
   const [stream, setStream] = useState<VodStream | undefined>(undefined)
   const playerRef = useRef<Player | null>(null)
-  const baseUrl = useAppSelector(selectPreferredBaseUrl)
 
   useEffect(() => {
     const stream = vodStreams.find((stream) => stream.stream_id === Number(id))
@@ -30,6 +25,11 @@ export const WatchMovie: FC = () => {
     setStream(stream)
   }, [id, vodStreams])
 
+  const url = useVodUrl(
+    stream?.stream_id ?? 0,
+    stream?.container_extension ?? "",
+  )
+
   const videoJsOptions = {
     autoplay: false,
     controls: true,
@@ -37,12 +37,7 @@ export const WatchMovie: FC = () => {
     fluid: true,
     sources: [
       {
-        src: getVodUrl(
-          baseUrl,
-          accountInfo.user_info?.username ?? "",
-          accountInfo.user_info?.password ?? "",
-          `${id}.${stream?.container_extension}`,
-        ),
+        src: url,
         type: containerToMimeType(stream?.container_extension ?? ""),
       },
     ],

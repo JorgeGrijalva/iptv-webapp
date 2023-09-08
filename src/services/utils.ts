@@ -1,5 +1,5 @@
 import { get, set } from "idb-keyval"
-import { SeriesStream, VodStream } from "./XtremeCodesAPI.types"
+import { LiveStream, SeriesStream, VodStream } from "./XtremeCodesAPI.types"
 
 export const localStorageSet = (key: string, data: string): Promise<void> => {
   return set(key, data)
@@ -16,37 +16,23 @@ export const getDateForTimestamp = (seconds: number): Date => {
 }
 
 export const isVod = (
-  stream: VodStream | SeriesStream,
+  stream: VodStream | SeriesStream | LiveStream,
 ): stream is VodStream => {
-  return (stream as VodStream).stream_id !== undefined
+  const vodStream = stream as VodStream
+  return vodStream.stream_id !== undefined && vodStream.stream_type !== "live"
 }
 
-export const getVodUrl = (
-  baseUrl: string,
-  username: string,
-  password: string,
-  filename: string,
-) => {
-  return `${baseUrl}/movie/${username}/${password}/${filename}`
+export const isSeries = (
+  stream: VodStream | SeriesStream | LiveStream,
+): stream is SeriesStream => {
+  return (stream as SeriesStream).series_id !== undefined
 }
 
-export const getEpisodeUrl = (
-  baseUrl: string,
-  username: string,
-  password: string,
-  filename: string,
-) => {
-  return `${baseUrl}/series/${username}/${password}/${filename}`
-}
-
-export const getLiveUrl = (
-  baseUrl: string,
-  username: string,
-  password: string,
-  id: string,
-  format: string,
-) => {
-  return `${baseUrl}/live/${username}/${password}/${id}.${format}`
+export const isLive = (
+  stream: VodStream | SeriesStream | LiveStream,
+): stream is LiveStream => {
+  const liveStream = stream as LiveStream
+  return liveStream.stream_type === "live" && liveStream.stream_id !== undefined
 }
 
 export const containerToMimeType = (container: string): string => {
