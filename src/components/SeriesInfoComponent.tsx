@@ -24,6 +24,7 @@ import { EpisodesCarousel } from "./EpisodesCarousel"
 import { selectWatchlist } from "../store/app/selector"
 import { addToWatchlist, removeFromWatchlist } from "../store/app/appSlice"
 import { useEpisodeUrl } from "./useMediaUrl"
+import { copyTextToClibpboard } from "../services/utils"
 
 export interface SeriesInfoProps {
   series: SeriesStream
@@ -113,8 +114,7 @@ export const SeriesInfoComponent: FC<SeriesInfoProps> = (props) => {
   }, [seasons])
 
   const onClickCopy = async () => {
-    await navigator.clipboard.writeText(url) // todo: fix bc this shit wont work on http site
-    console.log(url)
+    await copyTextToClibpboard(url)
   }
 
   if (state === "loading") return <Loading />

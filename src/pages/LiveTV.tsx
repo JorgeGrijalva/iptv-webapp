@@ -34,6 +34,7 @@ export const LiveTV: FC = () => {
   const url = useChannelUrl(selectedStream?.stream_id ?? 0, "m3u8")
 
   console.log(liveStreams)
+  console.log(selectedStream)
 
   const channelId = searchParams.get("channel")
 

@@ -1,5 +1,9 @@
-import { FC } from "react"
-import { SeriesStream, VodStream } from "../services/XtremeCodesAPI.types"
+import { FC, useState } from "react"
+import {
+  SeriesEpisode,
+  SeriesStream,
+  VodStream,
+} from "../services/XtremeCodesAPI.types"
 import { Box, Button, Modal, ModalClose, Typography } from "@mui/joy"
 import { VodInfoComponent } from "./VodInfoComponent"
 import { isVod } from "../services/utils"
@@ -15,6 +19,9 @@ export interface MediaInfoModalProps {
 export const MediaInfoModal: FC<MediaInfoModalProps> = (props) => {
   const { onClose, stream } = props
   const navigate = useNavigate()
+  const [selectedEpisode, setSelectedEpisode] = useState<
+    SeriesEpisode | undefined
+  >(undefined) // for series only
 
   const onClickWatch = () => {
     if (isVod(stream)) {
@@ -66,6 +73,8 @@ export const MediaInfoModal: FC<MediaInfoModalProps> = (props) => {
                 Play
               </Button>
             }
+            selectedEpisode={selectedEpisode}
+            onSelectEpisode={(episode) => setSelectedEpisode(episode)}
           />
         )}
       </Box>

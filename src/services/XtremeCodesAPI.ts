@@ -10,6 +10,7 @@ import {
   SeriesInfo,
   LiveStreamEPG,
 } from "./XtremeCodesAPI.types"
+import { Xmltv, parseXmltv } from "@iptv/xmltv"
 
 export class XtremeCodesAPI {
   private static async execute(
@@ -168,8 +169,7 @@ export class XtremeCodesAPI {
     })
   }
 
-  // returns xml file
-  public static async getAllEPG(config: XtremeCodesConfig): Promise<any> {
+  public static async getAllEPG(config: XtremeCodesConfig): Promise<Xmltv> {
     const query = { ...config.auth }
     const response = await fetch(
       `${config.baseUrl}/xmltv.php?${queryString.stringify(query)}`,
@@ -180,8 +180,28 @@ export class XtremeCodesAPI {
       return Promise.reject(new Error(message))
     }
 
-    const jsonRes = await response.json()
+    const text = await response.text() // text is going to be XML file
 
-    return Promise.resolve(jsonRes)
+    const result = parseXmltv(text)
+    return Promise.resolve(result)
+  }
+
+  public static async getM3uPlaylist(config: XtremeCodesConfig): Promise<any> {
+    const query = { ...config.auth, type: "m3u_plus", output: "ts" }
+
+    const response = await fetch(
+      `${config.baseUrl}/get.php?${queryString.stringify(query)}`,
+    )
+
+    if (!response.ok) {
+      const message = `An error has occured: ${response.status}`
+      return Promise.reject(new Error(message))
+    }
+
+    const text = await response.text() // text is going to be m3u file
+
+    // todo: process text and return a data structure
+
+    return text
   }
 }

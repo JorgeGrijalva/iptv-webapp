@@ -8,6 +8,7 @@ import { Loading } from "./layout/Loading"
 import { selectWatchlist } from "../store/app/selector"
 import { addToWatchlist, removeFromWatchlist } from "../store/app/appSlice"
 import { useVodUrl } from "./useMediaUrl"
+import { copyTextToClibpboard } from "../services/utils"
 
 export interface VodInfoProps {
   vod: VodStream
@@ -55,8 +56,7 @@ export const VodInfoComponent: FC<VodInfoProps> = (props) => {
   }
 
   const onClickCopy = async () => {
-    await navigator.clipboard.writeText(url) // todo: fix bc this shit wont work on http site
-    console.log(url)
+    await copyTextToClibpboard(url)
   }
 
   const showTrailer = trailerVisible && info?.info?.youtube_trailer
