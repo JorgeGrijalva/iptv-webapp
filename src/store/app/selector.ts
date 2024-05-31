@@ -51,9 +51,12 @@ export const selectWatchlist = createSelector(
 export const selectPreferredBaseUrl = createSelector(
   selectAccountInfo,
   (accountInfo) =>
-    `${accountInfo.server_info?.server_protocol}://${
-      accountInfo.server_info?.url
-    }:${
+    `${
+      window.location.protocol === "https:"
+        ? "https"
+        : accountInfo.server_info?.server_protocol
+    }://${accountInfo.server_info?.url}:${
+      window.location.protocol === "https:" ||
       accountInfo.server_info?.server_protocol === "https"
         ? accountInfo.server_info?.https_port
         : accountInfo.server_info?.port
