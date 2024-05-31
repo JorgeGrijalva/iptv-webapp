@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
     [username, password, baseUrl].every(Boolean) && status === "idle"
 
   const handleSubmit = async () => {
-    if (!baseUrl || !baseUrl.startsWith("http")) {
+    if (!baseUrl || !baseUrl.toLocaleLowerCase().startsWith("http")) {
       setError("Invalid url")
       return
     }
@@ -44,6 +44,16 @@ export const Login: React.FC = () => {
 
     if (!password || password.length === 0) {
       setError("Password must be provided")
+      return
+    }
+
+    if (
+      window.location.protocol === "https:" &&
+      !baseUrl.toLocaleLowerCase().startsWith("https")
+    ) {
+      setError(
+        "You must provide an https url when connecting from an https client",
+      )
       return
     }
 

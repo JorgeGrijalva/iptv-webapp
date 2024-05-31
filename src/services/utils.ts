@@ -1,4 +1,4 @@
-import { get, set } from "idb-keyval"
+import { get, set, clear } from "idb-keyval"
 import { LiveStream, SeriesStream, VodStream } from "./XtremeCodesAPI.types"
 
 export const localStorageSet = (key: string, data: string): Promise<void> => {
@@ -9,6 +9,10 @@ export const localStorageGet = (
   key: string,
 ): Promise<string | null | undefined> => {
   return get(key)
+}
+
+export const deleteAccountFromLocalStorage = (): Promise<void> => {
+  return clear()
 }
 
 export const getDateForTimestamp = (seconds: number): Date => {

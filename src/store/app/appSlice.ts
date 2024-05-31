@@ -18,7 +18,10 @@ import {
   loadApp,
   loadWatchlist,
 } from "./thunks"
-import { localStorageSet } from "../../services/utils"
+import {
+  deleteAccountFromLocalStorage,
+  localStorageSet,
+} from "../../services/utils"
 import { STORAGE_KEY } from "../../services/constants"
 import { WatchlistItem } from "../types"
 
@@ -68,10 +71,7 @@ export const appSlice = createSlice({
       state.status = action.payload
     },
     removeAccount: (state) => {
-      localStorageSet(
-        STORAGE_KEY.API_CONFIG,
-        JSON.stringify(initialState.accountInfo),
-      )
+      deleteAccountFromLocalStorage()
       state.status = "needsAuth"
     },
     addToWatchlist: (state, action: PayloadAction<WatchlistItem>) => {
