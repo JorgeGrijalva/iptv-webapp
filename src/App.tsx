@@ -2,7 +2,10 @@ import { Box, CssBaseline, CssVarsProvider, IconButton } from "@mui/joy"
 import Layout from "./components/layout/Layout"
 import { ColorSchemeToggle } from "./components/common/ColorSchemeToggle"
 import { useEffect, useState } from "react"
-import { Navigator } from "./components/layout/Navigator"
+import {
+  NavigatorHeader,
+  NavigatorSidebar,
+} from "./components/layout/Navigator"
 import { Route, Routes } from "react-router-dom"
 import { urls } from "./services/urls"
 import { Dashboard } from "./pages/Dashboard"
@@ -43,7 +46,7 @@ function App() {
         <div style={{ overflow: "hidden", width: "100vw", height: "100vh" }}>
           {drawerOpen && (
             <Layout.SideDrawer onClose={() => setDrawerOpen(false)}>
-              <Navigator />
+              <NavigatorSidebar />
             </Layout.SideDrawer>
           )}
           <Layout.Root
@@ -67,10 +70,11 @@ function App() {
                   variant="outlined"
                   size="sm"
                   onClick={() => setDrawerOpen(true)}
-                  sx={{ display: { sm: "none" } }}
+                  sx={{ display: { md: "none" } }}
                 >
                   <MenuIcon />
                 </IconButton>
+                <NavigatorHeader />
               </Box>
               <SearchInput />
               <Box
@@ -91,9 +95,6 @@ function App() {
                 </IconButton>
               </Box>
             </Layout.Header>
-            <Layout.SideNav>
-              <Navigator />
-            </Layout.SideNav>
             <Layout.Main sx={{ height: "100vh", overflow: "hidden" }}>
               <Routes>
                 <Route path={urls.home} element={<Dashboard />} />

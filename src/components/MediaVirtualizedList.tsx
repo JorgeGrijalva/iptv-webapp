@@ -32,7 +32,8 @@ export const MediaVirtualizedList: FC<MediaVirtualizedListProps> = (props) => {
       style={{
         height: "100%",
         overflow: "auto",
-        margin: -16,
+        marginLeft: -16,
+        marginRight: -16,
       }}
     >
       <div

@@ -10,8 +10,8 @@ function Root(props: BoxProps) {
           display: "grid",
           gridTemplateColumns: {
             xs: "1fr",
-            sm: "minmax(64px, 200px) minmax(450px, 1fr)",
-            md: "minmax(160px, 250px) minmax(500px, 1fr)",
+            //sm: "minmax(64px, 200px) minmax(450px, 1fr)",
+            //md: "minmax(160px, 250px) minmax(500px, 1fr)", no more sidebar on layout
           },
           gridTemplateRows: "64px 1fr",
           minHeight: "100vh",

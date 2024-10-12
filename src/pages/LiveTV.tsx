@@ -61,9 +61,9 @@ export const LiveTV: FC = () => {
     setSelectedCategory(firstCategory)
 
     setSelectedStream(
-      liveStreams.filter(
-        (stream) => stream.category_id === firstCategory?.category_id,
-      )[0],
+      liveStreams
+        .filter((stream) => stream.category_id === firstCategory?.category_id)
+        .find((item) => item !== undefined),
     )
   }, [channelId, liveStreamCategories, liveStreams])
 

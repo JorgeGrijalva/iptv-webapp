@@ -19,35 +19,35 @@ import TheatersIcon from "@mui/icons-material/Theaters"
 import TvIcon from "@mui/icons-material/Tv"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 
-export const Navigator: FC = () => {
-  const navigationItems = [
-    {
-      url: urls.home,
-      icon: <HomeIcon fontSize="small" />,
-      text: "Dashboard",
-    },
-    {
-      url: urls.liveTv,
-      icon: <LiveTvIcon fontSize="small" />,
-      text: "Live TV",
-    },
-    {
-      url: urls.movies,
-      icon: <TheatersIcon fontSize="small" />,
-      text: "Movies",
-    },
-    {
-      url: urls.tvShows,
-      icon: <TvIcon fontSize="small" />,
-      text: "TV Shows",
-    },
-    {
-      url: urls.watchlist,
-      icon: <BookmarkBorderIcon fontSize="small" />,
-      text: "Watchlist",
-    },
-  ]
+export const navigationItems = [
+  {
+    url: urls.home,
+    icon: <HomeIcon fontSize="small" />,
+    text: "Dashboard",
+  },
+  {
+    url: urls.liveTv,
+    icon: <LiveTvIcon fontSize="small" />,
+    text: "Live TV",
+  },
+  {
+    url: urls.movies,
+    icon: <TheatersIcon fontSize="small" />,
+    text: "Movies",
+  },
+  {
+    url: urls.tvShows,
+    icon: <TvIcon fontSize="small" />,
+    text: "TV Shows",
+  },
+  {
+    url: urls.watchlist,
+    icon: <BookmarkBorderIcon fontSize="small" />,
+    text: "Watchlist",
+  },
+]
 
+export const NavigatorSidebar: FC = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -85,5 +85,40 @@ export const Navigator: FC = () => {
         </List>
       </ListItem>
     </List>
+  )
+}
+
+export const NavigatorHeader: FC = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  return (
+    <>
+      <List
+        role="menubar"
+        orientation="horizontal"
+        size="sm"
+        sx={{
+          "--List-radius": "8px",
+          "--List-padding": "4px",
+          "--List-gap": "8px",
+          "--ListItem-gap": "0px",
+          display: { xs: "none", sm: "none", md: "inline-flex" },
+        }}
+      >
+        {navigationItems.map((item) => (
+          <ListItem role="none" key={item.url}>
+            <ListItemButton
+              role="menuitem"
+              selected={location.pathname === item.url}
+              onClick={() => navigate(item.url)}
+            >
+              <ListItemDecorator>{item.icon}</ListItemDecorator>
+              {item.text}
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </>
   )
 }
