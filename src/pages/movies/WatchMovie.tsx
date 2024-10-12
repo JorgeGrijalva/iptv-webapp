@@ -63,9 +63,9 @@ export const WatchMovie: FC = () => {
     <Box
       sx={{
         //flexGrow: 1,
-        overflow: "auto",
+        //overflow: "auto",
         height: "100%",
-        width: "100%",
+        //width: "100%",
       }}
     >
       {stream && (

@@ -81,7 +81,7 @@ export const WatchSeries: FC = () => {
         <Box
           sx={{
             flexGrow: 1,
-            overflow: "auto",
+            //overflow: "auto",
             height: "100%",
             paddingBottom: 5,
           }}

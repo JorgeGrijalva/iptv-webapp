@@ -43,7 +43,7 @@ function App() {
       {status === "needsAuth" && <Login />}
       {status === "needsLoad" && <Loading />}
       {status === "ready" && (
-        <div style={{ overflow: "hidden", width: "100vw", height: "100vh" }}>
+        <>
           {drawerOpen && (
             <Layout.SideDrawer onClose={() => setDrawerOpen(false)}>
               <NavigatorSidebar />
@@ -95,7 +95,7 @@ function App() {
                 </IconButton>
               </Box>
             </Layout.Header>
-            <Layout.Main sx={{ height: "100vh", overflow: "hidden" }}>
+            <Layout.Main>
               <Routes>
                 <Route path={urls.home} element={<Dashboard />} />
                 <Route path={urls.liveTv} element={<LiveTV />} />
@@ -108,7 +108,7 @@ function App() {
               </Routes>
             </Layout.Main>
           </Layout.Root>
-        </div>
+        </>
       )}
     </CssVarsProvider>
   )

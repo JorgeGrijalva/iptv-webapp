@@ -44,9 +44,7 @@ export const Watchlist: FC = () => {
           stream={selectedStream}
         />
       )}
-      <Box
-        sx={{ flexGrow: 1, overflow: "auto", height: "100%", paddingBottom: 5 }}
-      >
+      <Box sx={{ flexGrow: 1, height: "100%", paddingBottom: 5 }}>
         <Grid container spacing={2} sx={{ justifyContent: "flex-start" }}>
           {watchlistItems().map((item, index) => (
             <Grid
