@@ -3,6 +3,7 @@ import { useAppSelector } from "../store/hooks"
 import { selectLiveCategories, selectLiveStreams } from "../store/app/selector"
 import {
   Box,
+  Container,
   Grid,
   List,
   ListItem,
@@ -116,84 +117,75 @@ export const LiveTV: FC = () => {
   }
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        overflow: "auto",
-        height: "100%",
-        paddingBottom: 5,
-      }}
-    >
-      <Grid container>
-        <Grid xs={12} sm={12}>
-          <VideoPlayer options={videoJsOptions()} onReady={handlePlayerReady} />
-        </Grid>
-        <Grid>
-          <Sheet>
-            <List
-              variant="outlined"
-              orientation="horizontal"
-              sx={{
-                //minWidth: 240,
-                //width: 200,
-                //height: "30%",
-                borderRadius: "sm",
-                overflow: "auto",
-              }}
-            >
-              {liveStreamCategories.map((category) => (
-                <ListItem key={category.category_id}>
-                  <ListItemButton
-                    onClick={() => setSelectedCategory(category)}
-                    selected={selectedCategory === category}
-                  >
-                    <ListItemContent>{category.category_name}</ListItemContent>
-                    <KeyboardArrowRight />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-            <List
-              variant="outlined"
-              orientation="vertical"
-              sx={{ borderRadius: "sm", overflow: "auto", maxHeight: "500px" }}
-            >
-              {categoryLiveStreams().map((liveStream) => (
-                <ListItem key={liveStream.stream_id}>
-                  <ListItemContent>
-                    <Grid
-                      container
-                      sx={{
-                        "--Grid-borderWidth": "1px",
-                        borderTop: "var(--Grid-borderWidth) solid",
-                        //borderLeft: "var(--Grid-borderWidth) solid",
-                        borderBottom: "var(--Grid-borderWidth) solid",
+    <Box>
+      <Container maxWidth="lg">
+        <VideoPlayer options={videoJsOptions()} onReady={handlePlayerReady} />
+      </Container>
+      <Container maxWidth="xl">
+        <Sheet>
+          <List
+            variant="outlined"
+            orientation="horizontal"
+            sx={{
+              //minWidth: 240,
+              //width: 200,
+              //height: "30%",
+              borderRadius: "sm",
+              overflow: "auto",
+            }}
+          >
+            {liveStreamCategories.map((category) => (
+              <ListItem key={category.category_id}>
+                <ListItemButton
+                  onClick={() => setSelectedCategory(category)}
+                  selected={selectedCategory === category}
+                >
+                  <ListItemContent>{category.category_name}</ListItemContent>
+                  <KeyboardArrowRight />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <List
+            variant="outlined"
+            orientation="vertical"
+            sx={{ borderRadius: "sm", overflow: "auto", maxHeight: "500px" }}
+          >
+            {categoryLiveStreams().map((liveStream) => (
+              <ListItem key={liveStream.stream_id}>
+                <ListItemContent>
+                  <Grid
+                    container
+                    sx={{
+                      "--Grid-borderWidth": "1px",
+                      borderTop: "var(--Grid-borderWidth) solid",
+                      //borderLeft: "var(--Grid-borderWidth) solid",
+                      borderBottom: "var(--Grid-borderWidth) solid",
+                      borderColor: "divider",
+                      "& > div": {
+                        borderRight: "var(--Grid-borderWidth) solid",
+                        //borderBottom: "var(--Grid-borderWidth) solid",
                         borderColor: "divider",
-                        "& > div": {
-                          borderRight: "var(--Grid-borderWidth) solid",
-                          //borderBottom: "var(--Grid-borderWidth) solid",
-                          borderColor: "divider",
-                        },
-                        gap: 0,
-                      }}
-                    >
-                      <Grid sm={2}>
-                        <ChannelCard
-                          stream={liveStream}
-                          onStreamClick={(stream) => onStreamClick(liveStream)}
-                        />
-                      </Grid>
-                      <Grid sm={10}>
-                        <div>stuff here</div>
-                      </Grid>
+                      },
+                      gap: 0,
+                    }}
+                  >
+                    <Grid sm={2}>
+                      <ChannelCard
+                        stream={liveStream}
+                        onStreamClick={(stream) => onStreamClick(liveStream)}
+                      />
                     </Grid>
-                  </ListItemContent>
-                </ListItem>
-              ))}
-            </List>
-          </Sheet>
-        </Grid>
-      </Grid>
+                    <Grid sm={10}>
+                      <div>stuff here</div>
+                    </Grid>
+                  </Grid>
+                </ListItemContent>
+              </ListItem>
+            ))}
+          </List>
+        </Sheet>
+      </Container>
     </Box>
   )
 }

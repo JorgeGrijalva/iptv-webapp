@@ -76,38 +76,36 @@ export const WatchSeries: FC = () => {
   }
 
   return (
-    <>
-      <Box>
-        {stream && (
-          <>
-            <Box sx={{ height: "22px" }}>
-              <Typography
-                justifyContent="center"
-                alignContent="center"
-                textAlign="center"
-              >
-                {selectedEpisode?.title ?? stream.name}
-              </Typography>
-            </Box>
-            {selectedEpisode && (
-              <Container>
-                <VideoPlayer
-                  options={videoJsOptions()}
-                  onReady={handlePlayerReady}
-                />
-              </Container>
-            )}
-            <Box>
-              <SeriesInfoComponent
-                series={stream}
-                onSelectEpisode={onSelectEpisode}
-                selectedEpisode={selectedEpisode}
+    <Box>
+      {stream && (
+        <>
+          <Box sx={{ height: "22px" }}>
+            <Typography
+              justifyContent="center"
+              alignContent="center"
+              textAlign="center"
+            >
+              {selectedEpisode?.title ?? stream.name}
+            </Typography>
+          </Box>
+          {selectedEpisode && (
+            <Container>
+              <VideoPlayer
+                options={videoJsOptions()}
+                onReady={handlePlayerReady}
               />
-            </Box>
-          </>
-        )}
-        {!stream && <div>There was an error loadig that title</div>}
-      </Box>
-    </>
+            </Container>
+          )}
+          <Box>
+            <SeriesInfoComponent
+              series={stream}
+              onSelectEpisode={onSelectEpisode}
+              selectedEpisode={selectedEpisode}
+            />
+          </Box>
+        </>
+      )}
+      {!stream && <div>There was an error loadig that title</div>}
+    </Box>
   )
 }
