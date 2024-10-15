@@ -4,12 +4,12 @@ import { LiveStream } from "../services/XtremeCodesAPI.types"
 
 export interface ChannelCardProps {
   stream: LiveStream
-  selected: boolean
+  selected?: boolean
   onStreamClick: (stream: LiveStream) => void
 }
 
 export const ChannelCard: FC<ChannelCardProps> = (props) => {
-  const { stream, selected, onStreamClick } = props
+  const { stream, selected = false, onStreamClick } = props
 
   return (
     <Card
