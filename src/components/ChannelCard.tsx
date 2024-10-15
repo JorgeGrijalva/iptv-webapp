@@ -11,6 +11,7 @@ export interface ChannelCardProps {
 export const ChannelCard: FC<ChannelCardProps> = (props) => {
   const { stream, selected = false, onStreamClick } = props
 
+  //todo: add selected styling
   return (
     <Card
       sx={{
