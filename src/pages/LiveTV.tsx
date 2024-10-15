@@ -9,7 +9,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemContent,
-  Sheet,
 } from "@mui/joy"
 import { Category, LiveStream } from "../services/XtremeCodesAPI.types"
 import { KeyboardArrowRight } from "@mui/icons-material"
@@ -117,74 +116,77 @@ export const LiveTV: FC = () => {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        maxHeight: "100vh",
+        maxWidth: "100vw",
+        height: "100%",
+        width: "100%",
+      }}
+    >
       <Container maxWidth="lg">
         <VideoPlayer options={videoJsOptions()} onReady={handlePlayerReady} />
       </Container>
       <Container maxWidth="xl">
-        <Sheet>
-          <List
-            variant="outlined"
-            orientation="horizontal"
-            sx={{
-              //minWidth: 240,
-              //width: 200,
-              //height: "30%",
-              borderRadius: "sm",
-              overflow: "auto",
-            }}
-          >
-            {liveStreamCategories.map((category) => (
-              <ListItem key={category.category_id}>
-                <ListItemButton
-                  onClick={() => setSelectedCategory(category)}
-                  selected={selectedCategory === category}
-                >
-                  <ListItemContent>{category.category_name}</ListItemContent>
-                  <KeyboardArrowRight />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <List
-            variant="outlined"
-            orientation="vertical"
-            sx={{ borderRadius: "sm", overflow: "auto", maxHeight: "500px" }}
-          >
-            {categoryLiveStreams().map((liveStream) => (
-              <ListItem key={liveStream.stream_id}>
-                <ListItemContent>
-                  <Grid
-                    container
-                    sx={{
-                      "--Grid-borderWidth": "1px",
-                      borderTop: "var(--Grid-borderWidth) solid",
-                      //borderLeft: "var(--Grid-borderWidth) solid",
-                      borderBottom: "var(--Grid-borderWidth) solid",
+        <List
+          variant="outlined"
+          orientation="horizontal"
+          sx={{
+            borderRadius: "sm",
+            overflow: "auto",
+          }}
+        >
+          {liveStreamCategories.map((category) => (
+            <ListItem key={category.category_id}>
+              <ListItemButton
+                onClick={() => setSelectedCategory(category)}
+                selected={selectedCategory === category}
+              >
+                <ListItemContent>{category.category_name}</ListItemContent>
+                <KeyboardArrowRight />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <List
+          variant="outlined"
+          orientation="vertical"
+          sx={{ borderRadius: "sm", overflow: "auto", maxHeight: "500px" }}
+        >
+          {categoryLiveStreams().map((liveStream) => (
+            <ListItem key={liveStream.stream_id}>
+              <ListItemContent>
+                <Grid
+                  container
+                  sx={{
+                    "--Grid-borderWidth": "1px",
+                    borderTop: "var(--Grid-borderWidth) solid",
+                    //borderLeft: "var(--Grid-borderWidth) solid",
+                    borderBottom: "var(--Grid-borderWidth) solid",
+                    borderColor: "divider",
+                    "& > div": {
+                      borderRight: "var(--Grid-borderWidth) solid",
+                      //borderBottom: "var(--Grid-borderWidth) solid",
                       borderColor: "divider",
-                      "& > div": {
-                        borderRight: "var(--Grid-borderWidth) solid",
-                        //borderBottom: "var(--Grid-borderWidth) solid",
-                        borderColor: "divider",
-                      },
-                      gap: 0,
-                    }}
-                  >
-                    <Grid sm={2}>
-                      <ChannelCard
-                        stream={liveStream}
-                        onStreamClick={(stream) => onStreamClick(liveStream)}
-                      />
-                    </Grid>
-                    <Grid sm={10}>
-                      <div>stuff here</div>
-                    </Grid>
+                    },
+                    gap: 0,
+                  }}
+                >
+                  <Grid sm={2}>
+                    <ChannelCard
+                      stream={liveStream}
+                      onStreamClick={(stream) => onStreamClick(stream)}
+                      selected={selectedStream === liveStream}
+                    />
                   </Grid>
-                </ListItemContent>
-              </ListItem>
-            ))}
-          </List>
-        </Sheet>
+                  <Grid sm={10}>
+                    <div>stuff here</div>
+                  </Grid>
+                </Grid>
+              </ListItemContent>
+            </ListItem>
+          ))}
+        </List>
       </Container>
     </Box>
   )
