@@ -9,7 +9,7 @@ import { useAppSelector } from "../../store/hooks"
 import { selectSeriesStreams } from "../../store/app/selector"
 import { VideoPlayer } from "../../components/VideoPlayer"
 import videojs from "video.js"
-import { Box, Grid, Typography } from "@mui/joy"
+import { Box, Container, Typography } from "@mui/joy"
 import { SeriesInfoComponent } from "../../components/SeriesInfoComponent"
 import { containerToMimeType } from "../../services/utils"
 import { useEpisodeUrl } from "../../components/useMediaUrl"
@@ -77,17 +77,10 @@ export const WatchSeries: FC = () => {
 
   return (
     <>
-      {stream && (
-        <Box
-          sx={{
-            flexGrow: 1,
-            //overflow: "auto",
-            height: "100%",
-            paddingBottom: 5,
-          }}
-        >
-          <Grid container>
-            <Grid xs={12} sm={12}>
+      <Box>
+        {stream && (
+          <>
+            <Box sx={{ height: "22px" }}>
               <Typography
                 justifyContent="center"
                 alignContent="center"
@@ -95,26 +88,26 @@ export const WatchSeries: FC = () => {
               >
                 {selectedEpisode?.title ?? stream.name}
               </Typography>
-            </Grid>
+            </Box>
             {selectedEpisode && (
-              <Grid xs={12} sm={12}>
+              <Container>
                 <VideoPlayer
                   options={videoJsOptions()}
                   onReady={handlePlayerReady}
                 />
-              </Grid>
+              </Container>
             )}
-            <Grid>
+            <Box>
               <SeriesInfoComponent
                 series={stream}
                 onSelectEpisode={onSelectEpisode}
                 selectedEpisode={selectedEpisode}
               />
-            </Grid>
-          </Grid>
-        </Box>
-      )}
-      {!stream && <div>There was an error loadig that title</div>}
+            </Box>
+          </>
+        )}
+        {!stream && <div>There was an error loadig that title</div>}
+      </Box>
     </>
   )
 }

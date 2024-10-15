@@ -8,7 +8,7 @@ import Player from "video.js/dist/types/player"
 import videojs from "video.js"
 import { containerToMimeType } from "../../services/utils"
 import { VodInfoComponent } from "../../components/VodInfoComponent"
-import { Box } from "@mui/joy"
+import { Box, Container } from "@mui/joy"
 import { useVodUrl } from "../../components/useMediaUrl"
 
 export const WatchMovie: FC = () => {
@@ -60,33 +60,16 @@ export const WatchMovie: FC = () => {
   }
 
   return (
-    <Box
-      sx={{
-        //flexGrow: 1,
-        //overflow: "auto",
-        height: "100%",
-        //width: "100%",
-      }}
-    >
+    <Box>
       {stream && (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateRows: "1fr 1fr",
-            gridTemplateColumns: "1fr",
-          }}
-        >
-          <Box
-            sx={{
-              height: "100%",
-            }}
-          >
+        <>
+          <Container maxWidth="lg">
             <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady} />
-          </Box>
+          </Container>
           <Box>
             <VodInfoComponent vod={stream} />
           </Box>
-        </Box>
+        </>
       )}
       {!stream && <div>There was an error loadig that title</div>}
     </Box>
