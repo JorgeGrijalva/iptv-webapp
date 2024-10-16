@@ -31,6 +31,7 @@
     "video.js": "^8.18.1"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^2.0.3",
     "@testing-library/dom": "^9.2.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^14.0.0",
