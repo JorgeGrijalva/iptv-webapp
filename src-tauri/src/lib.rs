@@ -6,7 +6,7 @@ use tauri::Manager;
 pub fn run() {
   tauri::Builder::default()
     .setup(|app| {
-      let window = app.get_window("main").unwrap(); // get_webview_window in v2
+      let _window = app.get_window("main").unwrap(); // get_webview_window en Tauri v2
 
       //let raw_handle = window.window_handle();
       //let handle = window.hwnd();
