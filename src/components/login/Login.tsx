@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   FormControl,
   FormLabel,
@@ -62,7 +63,7 @@ export const Login: React.FC = () => {
 
     setStatus("loading")
     dispatch(setApiConfig(config))
-    // load common app shit here
+
     try {
       await Promise.all([
         dispatch(fetchLiveStreamCategories()).unwrap(),
@@ -80,67 +81,173 @@ export const Login: React.FC = () => {
   }
 
   return (
-    <main>
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(to bottom, #000000, #1a1a1a)",
+        position: "relative",
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 
+            "radial-gradient(circle at 50% 50%, rgba(45, 85, 255, 0.1), transparent 50%)",
+          animation: "pulse 8s infinite",
+        },
+      }}
+    >
       <Sheet
         sx={{
-          width: 300,
-          mx: "auto", // margin left & right
-          my: 4, // margin top & bottom
-          py: 3, // padding top & bottom
-          px: 2, // padding left & right
+          width: {
+            xs: "90%",
+            sm: 400,
+          },
+          mx: "auto",
+          my: 4,
+          py: 3,
+          px: 2,
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          borderRadius: "sm",
-          boxShadow: "md",
-          bgcolor: "background.appBody",
+          borderRadius: "xl",
+          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+          background: "rgba(17, 25, 40, 0.75)",
+          backdropFilter: "blur(12px)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          transition: "transform 0.2s ease-in-out",
+          "&:hover": {
+            transform: "scale(1.02)",
+          },
         }}
         variant="outlined"
       >
         <div>
-          <Typography level="h4" component="h1">
-            <b>Welcome!</b>
+          <Typography
+            level="h2"
+            component="h1"
+            sx={{
+              background: "linear-gradient(45deg, #00f2fe 30%, #4facfe 90%)",
+              backgroundClip: "text",
+              textFillColor: "transparent",
+              mb: 0.5,
+              textAlign: "center",
+              fontWeight: 700,
+            }}
+          >
+            ¡Bienvenido!
           </Typography>
-          <Typography level="body-sm">Sign in to continue.</Typography>
+          <Typography
+            level="body-sm"
+            sx={{ 
+              color: "rgba(255,255,255,0.7)",
+              mb: 3,
+              textAlign: "center"
+            }}
+          >
+            Inicia sesión para continuar
+          </Typography>
         </div>
+
         {error && error.length > 0 && (
-          <Alert color="danger" variant="solid">
+          <Alert
+            color="danger"
+            variant="soft"
+            sx={{
+              borderRadius: "xl",
+              backgroundColor: "rgba(211, 47, 47, 0.15)",
+              border: "1px solid rgba(211, 47, 47, 0.3)",
+            }}
+          >
             {error}
           </Alert>
         )}
+
         <FormControl>
-          <FormLabel>Username</FormLabel>
+          <FormLabel sx={{ color: "rgba(255,255,255,0.8)" }}>Usuario</FormLabel>
           <Input
             name="username"
             type="username"
-            placeholder="username"
+            placeholder="Tu nombre de usuario"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            sx={{
+              "--Input-focusedThickness": "2px",
+              "--Input-focusedHighlight": "rgba(79, 172, 254, 0.5)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
+              "&::placeholder": {
+                color: "rgba(255, 255, 255, 0.5)",
+              },
+            }}
           />
         </FormControl>
+
         <FormControl>
-          <FormLabel>Password</FormLabel>
+          <FormLabel sx={{ color: "rgba(255,255,255,0.8)" }}>Contraseña</FormLabel>
           <Input
             name="password"
             type="password"
-            placeholder="password"
+            placeholder="Tu contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            sx={{
+              "--Input-focusedThickness": "2px",
+              "--Input-focusedHighlight": "rgba(79, 172, 254, 0.5)",
+              backgroundColor: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              },
+              "&::placeholder": {
+                color: "rgba(255, 255, 255, 0.5)",
+              },
+            }}
           />
         </FormControl>
 
         <Button
-          sx={{ mt: 1 }}
           loading={status !== "idle"}
           loadingPosition="start"
           onClick={handleSubmit}
           disabled={!canSubmit}
+          sx={{
+            mt: 1,
+            background: "linear-gradient(45deg, #00f2fe 30%, #4facfe 90%)",
+            textTransform: "none",
+            fontSize: "1rem",
+            fontWeight: 600,
+            borderRadius: "xl",
+            border: "none",
+            color: "#000",
+            boxShadow: "0 3px 15px rgba(79, 172, 254, 0.4)",
+            transition: "all 0.3s ease",
+            "&:hover": {
+              transform: "translateY(-2px)",
+              boxShadow: "0 5px 20px rgba(79, 172, 254, 0.6)",
+            },
+            "&:disabled": {
+              background: "rgba(255, 255, 255, 0.1)",
+              color: "rgba(255, 255, 255, 0.3)",
+            },
+          }}
         >
-          {status === "idle" && <>Log in</>}
-          {status === "pending" && <>Submitting</>}
-          {status === "loading" && <>Performing initial load</>}
+          {status === "idle" && "Iniciar sesión"}
+          {status === "pending" && "Verificando..."}
+          {status === "loading" && "Cargando datos..."}
         </Button>
       </Sheet>
-    </main>
+    </Box>
   )
 }
