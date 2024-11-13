@@ -37,6 +37,12 @@ function App() {
     }
   }, [dispatch, status])
 
+  useEffect(() => {
+    const handleCloseDrawer = () => setDrawerOpen(false)
+    window.addEventListener('closeDrawer', handleCloseDrawer)
+    return () => window.removeEventListener('closeDrawer', handleCloseDrawer)
+  }, [])
+
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
