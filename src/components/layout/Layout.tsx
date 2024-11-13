@@ -7,6 +7,7 @@ function Root(props: BoxProps) {
       sx={[
         {
           bgcolor: "background.appBody",
+          overflowX: "hidden",
           display: "grid",
           gridTemplateColumns: "1fr",
           gridTemplateRows: "auto 1fr",

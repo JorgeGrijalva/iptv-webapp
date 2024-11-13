@@ -26,6 +26,7 @@
     "@mui/joy": "^5.0.0-beta.48",
     "@reduxjs/toolkit": "^1.8.1",
     "@tanstack/react-virtual": "^3.10.8",
+    "framer-motion": "^11.11.15",
     "idb-keyval": "^6.2.1",
     "query-string": "^8.1.0",
     "react": "^18.3.1",

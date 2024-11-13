@@ -1,0 +1,1 @@
+export const DEFAULT_CHANNEL_ICON = '/default-channel-icon.png'; 
