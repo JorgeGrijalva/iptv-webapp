@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">NombreApp</string>
+    <string name="title_activity_main">NombreApp</string>
+    <string name="package_name">com.miempresa.iptvwebapp</string>
+    <string name="custom_url_scheme">com.miempresa.iptvwebapp</string>
+</resources>
