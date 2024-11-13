@@ -89,6 +89,9 @@ function App() {
                 <IconButton
                   size="sm"
                   variant="soft"
+                  onClick={() => {
+                    window.location.href = urls.home
+                  }}
                   sx={{ display: { xs: "none", sm: "inline-flex" } }}
                 >
                   <GroupRoundedIcon />

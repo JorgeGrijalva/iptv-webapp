@@ -109,10 +109,10 @@ export const Dashboard: FC = () => {
               rowGap: 5,
             }}
           >
-            <Item>
+            {/* <Item>
               <b>Provider</b>
             </Item>
-            <Item>{accountInfo.server_info?.url}</Item>
+            <Item>{accountInfo.server_info?.url}</Item> */}
             <Item>
               <b>Username</b>
             </Item>
