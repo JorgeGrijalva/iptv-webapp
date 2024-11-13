@@ -17,9 +17,7 @@ export interface MenuProps {
 }
 
 const Menu: FC<MenuProps> = (props) => {
-  const [buttonElement, setButtonElement] = useState<HTMLButtonElement | null>(
-    null,
-  )
+  const [buttonElement, setButtonElement] = useState<HTMLButtonElement | null>(null)
   const [isOpen, setOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const menuActions = useRef<MenuActions>(null)
@@ -36,13 +34,10 @@ const Menu: FC<MenuProps> = (props) => {
       preventReopen.current = false
       return
     }
-
     setOpen((open) => !open)
   }
 
-  const handleButtonKeyDown = (
-    event: React.KeyboardEvent<HTMLButtonElement>,
-  ) => {
+  const handleButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault()
       setOpen(true)
@@ -79,7 +74,25 @@ const Menu: FC<MenuProps> = (props) => {
         open={isOpen}
         onClose={close}
         anchorEl={buttonElement}
-        sx={{ minWidth: 120 }}
+        sx={{
+          minWidth: 120,
+          background: "rgba(17, 25, 40, 0.95)",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+          "& .MuiMenuItem-root": {
+            color: "rgba(255, 255, 255, 0.8)",
+            transition: "all 0.2s ease",
+            "&:hover": {
+              background: "rgba(255, 255, 255, 0.1)",
+            },
+            "&.Mui-selected": {
+              background: "rgba(79, 172, 254, 0.15)",
+              "&:hover": {
+                background: "rgba(79, 172, 254, 0.25)",
+              },
+            },
+          },
+        }}
       >
         {menus.map(({ label, active, ...item }) => {
           const menuItem = (
@@ -88,6 +101,12 @@ const Menu: FC<MenuProps> = (props) => {
               variant={active ? "soft" : "plain"}
               onClick={close}
               {...item}
+              sx={{
+                fontSize: "0.875rem",
+                borderRadius: "md",
+                my: 0.5,
+                mx: 1,
+              }}
             >
               {label}
             </MenuItem>

@@ -11,6 +11,9 @@ import {
   Sheet,
   Typography,
   styled,
+  Avatar,
+  Grid,
+  Divider,
 } from "@mui/joy"
 import { getDateForTimestamp } from "../services/utils"
 import {
@@ -35,8 +38,6 @@ export const Dashboard: FC = () => {
     lastFetchedAccountInfo,
   } = useAppSelector(selectAppState)
   const dispatch = useAppDispatch()
-
-  console.log(accountInfo)
 
   const refreshInfo = () => {
     dispatch(fetchAccountInfo({}))
@@ -74,7 +75,6 @@ export const Dashboard: FC = () => {
       }}
     >
       <Card
-        orientation="horizontal"
         sx={{
           width: {
             xs: "95%",
@@ -95,12 +95,21 @@ export const Dashboard: FC = () => {
             flexDirection: "column",
             alignItems: "center",
             width: "100%",
-            padding: {
-              xs: 2,
-              sm: 4,
-            },
+            padding: { xs: 2, sm: 4 },
           }}
         >
+          <Avatar
+            sx={{
+              width: { xs: 80, sm: 120 },
+              height: { xs: 80, sm: 120 },
+              mb: 2,
+              background: "linear-gradient(45deg, #00f2fe 30%, #4facfe 90%)",
+              fontSize: { xs: "2rem", sm: "3rem" },
+            }}
+          >
+            {accountInfo.user_info?.username?.charAt(0).toUpperCase()}
+          </Avatar>
+
           <Typography
             level="h2"
             sx={{
@@ -109,51 +118,68 @@ export const Dashboard: FC = () => {
               textFillColor: "transparent",
               mb: 4,
               fontWeight: 700,
-              fontSize: {
-                xs: "1.75rem",
-                sm: "2.125rem",
-              },
+              fontSize: { xs: "1.75rem", sm: "2.125rem" },
               textAlign: "center",
             }}
           >
-            Tu Cuenta
+            Perfil de Usuario
           </Typography>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "1fr",
-                sm: "1fr 1fr",
-              },
-              gap: {
-                xs: "12px",
-                sm: "20px",
-              },
-              width: "100%",
-              maxWidth: "800px",
-            }}
+          <Grid
+            container
+            spacing={2}
+            sx={{ maxWidth: 800, width: "100%", mb: 4 }}
           >
-            <StyledItem>
-              <Typography level="title-sm" sx={{ color: "rgba(255,255,255,0.7)" }}>
-                Usuario
-              </Typography>
-              <Typography 
-                level="body-lg" 
-                sx={{ 
-                  color: "white",
-                  fontSize: {
-                    xs: "0.875rem",
-                    sm: "1rem",
-                  }
-                }}
-              >
-                {accountInfo.user_info?.username}
-              </Typography>
-            </StyledItem>
+            <Grid xs={12} sm={6}>
+              <StyledItem>
+                <Typography level="title-sm" sx={{ color: "rgba(255,255,255,0.7)" }}>
+                  Usuario
+                </Typography>
+                <Typography level="body-lg" sx={{ color: "white" }}>
+                  {accountInfo.user_info?.username}
+                </Typography>
+              </StyledItem>
+            </Grid>
 
-            {/* Repite el patrón para los demás campos */}
-          </div>
+            <Grid xs={12} sm={6}>
+              <StyledItem>
+                <Typography level="title-sm" sx={{ color: "rgba(255,255,255,0.7)" }}>
+                  Estado
+                </Typography>
+                <Typography level="body-lg" sx={{ color: "white" }}>
+                  {accountInfo.user_info?.status === "Active" ? "Activo" : "Inactivo"}
+                </Typography>
+              </StyledItem>
+            </Grid>
+
+            <Grid xs={12} sm={6}>
+              <StyledItem>
+                <Typography level="title-sm" sx={{ color: "rgba(255,255,255,0.7)" }}>
+                  Fecha de Expiración
+                </Typography>
+                <Typography level="body-lg" sx={{ color: "white" }}>
+                  {new Date(accountInfo.user_info?.exp_date ?? 0).toLocaleDateString()}
+                </Typography>
+              </StyledItem>
+            </Grid>
+
+            <Grid xs={12} sm={6}>
+              <StyledItem>
+                <Typography level="title-sm" sx={{ color: "rgba(255,255,255,0.7)" }}>
+                  Máximas Conexiones
+                </Typography>
+                <Typography level="body-lg" sx={{ color: "white" }}>
+                  {accountInfo.user_info?.max_connections}
+                </Typography>
+              </StyledItem>
+            </Grid>
+          </Grid>
+
+          <Divider sx={{ my: 3, width: "100%", opacity: 0.1 }} />
+
+          <Typography level="h3" sx={{ mb: 2, color: "white" }}>
+            Estadísticas
+          </Typography>
 
           <Sheet
             sx={{

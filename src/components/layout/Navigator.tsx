@@ -21,11 +21,6 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 
 export const navigationItems = [
   {
-    url: urls.home,
-    icon: <HomeIcon fontSize="small" />,
-    text: "Dashboard",
-  },
-  {
     url: urls.liveTv,
     icon: <LiveTvIcon fontSize="small" />,
     text: "Live TV",
@@ -44,6 +39,11 @@ export const navigationItems = [
     url: urls.watchlist,
     icon: <BookmarkBorderIcon fontSize="small" />,
     text: "Watchlist",
+  },
+  {
+    url: urls.home,
+    icon: <HomeIcon fontSize="small" />,
+    text: "Profile",
   },
 ]
 
