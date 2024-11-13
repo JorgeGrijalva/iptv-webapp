@@ -23,20 +23,15 @@ import {
 export const Login: React.FC = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [baseUrl, setBaseUrl] = useState("")
   const [error, setError] = useState("")
   const dispatch = useAppDispatch()
   const [status, setStatus] = useState<"idle" | "pending" | "loading">("idle")
 
-  const canSubmit =
-    [username, password, baseUrl].every(Boolean) && status === "idle"
+  const baseUrl = import.meta.env.VITE_API_BASE_URL
+
+  const canSubmit = [username, password].every(Boolean) && status === "idle"
 
   const handleSubmit = async () => {
-    if (!baseUrl || !baseUrl.toLocaleLowerCase().startsWith("http")) {
-      setError("Invalid url")
-      return
-    }
-
     if (!username || username.length === 0) {
       setError("Username must be provided")
       return
@@ -44,16 +39,6 @@ export const Login: React.FC = () => {
 
     if (!password || password.length === 0) {
       setError("Password must be provided")
-      return
-    }
-
-    if (
-      window.location.protocol === "https:" &&
-      !baseUrl.toLocaleLowerCase().startsWith("https")
-    ) {
-      setError(
-        "You must provide an https url when connecting from an https client",
-      )
       return
     }
 
@@ -123,16 +108,6 @@ export const Login: React.FC = () => {
             {error}
           </Alert>
         )}
-        <FormControl>
-          <FormLabel>Url</FormLabel>
-          <Input
-            name="url"
-            type="input"
-            placeholder="http://my-url:port"
-            value={baseUrl}
-            onChange={(e) => setBaseUrl(e.target.value)}
-          />
-        </FormControl>
         <FormControl>
           <FormLabel>Username</FormLabel>
           <Input
