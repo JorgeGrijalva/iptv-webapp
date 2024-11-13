@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react"
+import { FC, useMemo, useState } from "react"
 import {
   LiveStream,
   SeriesStream,
@@ -20,113 +20,101 @@ export interface MediaCarouselProps {
 
 export const MediaCarousel: FC<MediaCarouselProps> = (props) => {
   const { items, onStreamClick } = props
-  const [currentPage, setCurrentPage] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
   const theme = useTheme()
   const isSmScreen = useMediaQuery(theme.breakpoints.up("sm"))
   const ismdScreen = useMediaQuery(theme.breakpoints.up("md"))
   const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"))
   const isXtraLargeScreen = useMediaQuery(theme.breakpoints.up("xl"))
 
-  const pageSize = useCallback(() => {
-    if (isXtraLargeScreen) return 5
-    if (isLargeScreen) return 4
-    if (ismdScreen) return 3
-    if (isSmScreen) return 2
-    return 1
+  const itemsPerView = useMemo(() => {
+    if (isXtraLargeScreen) return 20
+    if (isLargeScreen) return 15
+    if (ismdScreen) return 7
+    if (isSmScreen) return 7
+    return 10
   }, [isLargeScreen, isSmScreen, isXtraLargeScreen, ismdScreen])
 
-  const pageItems = useMemo(
-    () =>
-      items.slice(
-        currentPage * pageSize(),
-        currentPage * pageSize() + pageSize(),
-      ),
-    [currentPage, items, pageSize],
-  )
-
-  const handleClickPrev = () => {
-    if (currentPage === 0) return
-
-    setCurrentPage((prev) => prev - 1)
+  const handleNext = () => {
+    setCurrentIndex((prev) => 
+      Math.min(prev + itemsPerView, items.length - itemsPerView)
+    )
   }
 
-  const handleClickNext = () => {
-    const lastElementIndex = currentPage * pageSize() + pageSize()
-
-    if (lastElementIndex >= items.length - 1) return
-
-    setCurrentPage((prev) => prev + 1)
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - itemsPerView, 0))
   }
 
-  const hasNext = currentPage * pageSize() + pageSize() < items.length - 1
-
-  const hasPrev = currentPage > 0
+  const visibleItems = items.slice(currentIndex, currentIndex + itemsPerView)
+  const canGoNext = currentIndex + itemsPerView < items.length
+  const canGoPrev = currentIndex > 0
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexGrow: 1,
-        flexWrap: "nowrap",
-        height: "90%",
-        marginBottom: 5,
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        overflow: "hidden",
+        padding: { xs: "0 8px", sm: "0 16px" },
       }}
     >
-      <IconButton
-        variant="outlined"
-        size="sm"
-        onClick={handleClickPrev}
-        sx={{
-          marginY: 5,
-          marginX: 0,
-          display: "inline-flex",
-          width: "auto",
-          flexGrow: 0,
-        }}
-        disabled={!hasPrev}
-      >
-        <ArrowBackIcon />
-      </IconButton>
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: {
-            xl: "1fr 1fr 1fr 1fr 1fr",
-            lg: "1fr 1fr 1fr 1fr",
-            md: "1fr 1fr 1fr",
-            sm: "minmax(100px, 1fr) minmax(100px, 1fr)",
-            xs: "minmax(100px, 1fr)",
+            xl: `repeat(${itemsPerView}, 1fr)`,
+            lg: `repeat(${itemsPerView}, 1fr)`,
+            md: `repeat(${itemsPerView}, 1fr)`,
+            sm: `repeat(${itemsPerView}, 1fr)`,
+            xs: `repeat(${itemsPerView}, 1fr)`,
           },
-          gridTemplateRows: "1fr",
-          flexGrow: 1,
-          columnGap: 5,
-          rowGap: 5,
-          wrap: "nowrap",
-          width: "100%",
+          gap: { xs: 1, sm: 1.5, md: 2 },
+          transition: "transform 0.3s ease",
         }}
       >
-        {pageItems.map((item) => {
-          if (isLive(item))
-            return <ChannelCard stream={item} onStreamClick={onStreamClick} />
-          else
-            return (
-              <MediaCard
-                onStreamClick={onStreamClick}
-                stream={item}
-                key={isSeries(item) ? item.series_id : item.stream_id}
-              />
-            )
-        })}
+        {visibleItems.map((item) => (
+          <MediaCard 
+            isMobile={isSmScreen}
+            key={isSeries(item) ? item.series_id : item.stream_id}
+            stream={item}
+            onStreamClick={onStreamClick}
+          />
+        ))}
       </Box>
-      <IconButton
-        variant="outlined"
-        size="sm"
-        onClick={handleClickNext}
-        sx={{ marginY: 5, display: "inline-flex" }}
-        disabled={!hasNext}
-      >
-        <ArrowForwardIcon />
-      </IconButton>
-    </div>
+
+      {canGoPrev && (
+        <IconButton
+          onClick={handlePrev}
+          sx={{
+            position: "absolute",
+            left: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 2,
+            background: "rgba(0,0,0,0.7)",
+            "&:hover": { background: "rgba(0,0,0,0.9)" }
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+      )}
+
+      {canGoNext && (
+        <IconButton
+          onClick={handleNext}
+          sx={{
+            position: "absolute",
+            right: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 2,
+            background: "rgba(0,0,0,0.7)",
+            "&:hover": { background: "rgba(0,0,0,0.9)" }
+          }}
+        >
+          <ArrowForwardIcon />
+        </IconButton>
+      )}
+    </Box>
   )
 }

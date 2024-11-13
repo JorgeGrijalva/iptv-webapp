@@ -21,9 +21,9 @@ export const MediaVirtualizedList: FC<MediaVirtualizedListProps> = (props) => {
   const rowVirtualizer = useVirtualizer({
     count: categories.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 350,
-    overscan: 5,
-    paddingEnd: 50,
+    estimateSize: () => 360,
+    overscan: 2,
+    paddingEnd: 40,
   })
 
   return (
@@ -32,8 +32,8 @@ export const MediaVirtualizedList: FC<MediaVirtualizedListProps> = (props) => {
       style={{
         height: "100%",
         overflow: "auto",
-        marginLeft: -16,
-        marginRight: -16,
+        margin: "0 -16px",
+        padding: "16px 0",
       }}
     >
       <div
@@ -55,18 +55,30 @@ export const MediaVirtualizedList: FC<MediaVirtualizedListProps> = (props) => {
                 height: `${virtualItem.size}px`,
                 width: "100%",
                 transform: `translateY(${virtualItem.start}px)`,
+                padding: "12px 16px",
               }}
             >
               <Typography
                 level="title-lg"
-                justifyContent="center"
-                display="flex"
+                sx={{
+                  background: "linear-gradient(45deg, #00f2fe 30%, #4facfe 90%)",
+                  backgroundClip: "text",
+                  textFillColor: "transparent",
+                  fontWeight: 700,
+                  fontSize: {
+                    xs: "1.25rem",
+                    sm: "1.5rem",
+                  },
+                  mb: { xs: 2, sm: 3 },
+                  textAlign: "center",
+                  letterSpacing: "0.5px",
+                }}
               >
                 {category.category_name}
               </Typography>
               <MediaCarousel
                 items={streams.filter(
-                  (stream) => stream.category_id === category.category_id,
+                  (stream) => stream.category_id === category.category_id
                 )}
                 onStreamClick={onStreamClick}
               />

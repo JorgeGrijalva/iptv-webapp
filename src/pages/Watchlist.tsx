@@ -59,8 +59,8 @@ export const Watchlist: FC = () => {
               alignItems="center"
               minHeight={300}
             >
-              <MediaCard onStreamClick={setSelectedStream} stream={item} />
-            </Grid>
+              <MediaCard onStreamClick={setSelectedStream} stream={item} />   
+            </Grid> 
           ))}
         </Grid>
       </Box>
