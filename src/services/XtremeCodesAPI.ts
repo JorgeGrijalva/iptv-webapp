@@ -182,8 +182,10 @@ export class XtremeCodesAPI {
 
   public static async getAllEPG(config: XtremeCodesConfig): Promise<Xmltv> {
     const query = { ...config.auth }
+    const proxyUrl = import.meta.env.VITE_PROXY_URL || '/api';
+    
     const response = await fetch(
-      `${config.baseUrl}/xmltv.php?${queryString.stringify(query)}`,
+      `${proxyUrl}/xmltv.php?${queryString.stringify(query)}`,
     )
 
     if (!response.ok) {
@@ -191,17 +193,17 @@ export class XtremeCodesAPI {
       return Promise.reject(new Error(message))
     }
 
-    const text = await response.text() // text is going to be XML file
-
+    const text = await response.text()
     const result = parseXmltv(text)
     return Promise.resolve(result)
   }
 
   public static async getM3uPlaylist(config: XtremeCodesConfig): Promise<any> {
     const query = { ...config.auth, type: "m3u_plus", output: "ts" }
+    const proxyUrl = import.meta.env.VITE_PROXY_URL || '/api';
 
     const response = await fetch(
-      `${config.baseUrl}/get.php?${queryString.stringify(query)}`,
+      `${proxyUrl}/get.php?${queryString.stringify(query)}`,
     )
 
     if (!response.ok) {
@@ -209,10 +211,7 @@ export class XtremeCodesAPI {
       return Promise.reject(new Error(message))
     }
 
-    const text = await response.text() // text is going to be m3u file
-
-    // todo: process text and return a data structure
-
+    const text = await response.text()
     return text
   }
 }

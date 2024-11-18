@@ -18,6 +18,11 @@ const proxy = createProxyMiddleware({
   changeOrigin: true,
   pathRewrite: {
     '^/api': '',
+    '^/live': '/live',
+    '^/movie': '/movie',
+    '^/series': '/series',
+    '^/xmltv.php': '/xmltv.php',
+    '^/get.php': '/get.php'
   },
   onProxyRes: function (proxyRes, req, res) {
     proxyRes.headers['access-control-allow-origin'] = '*';
@@ -26,9 +31,6 @@ const proxy = createProxyMiddleware({
   }
 });
 
-app.use('/api', proxy);
-app.use('/live', proxy);
-app.use('/movie', proxy);
-app.use('/series', proxy);
+app.use('/', proxy);
 
 module.exports = app; 
