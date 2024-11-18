@@ -6,12 +6,19 @@
   "routes": [
     { 
       "src": "/api/(.*)",
-      "dest": "/api/proxy.js",
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization"
-      }
+      "dest": "/api/proxy.js"
+    },
+    {
+      "src": "/live/(.*)",
+      "dest": "/api/proxy.js"
+    },
+    {
+      "src": "/movie/(.*)",
+      "dest": "/api/proxy.js"
+    },
+    {
+      "src": "/series/(.*)",
+      "dest": "/api/proxy.js"
     }
   ],
   "env": {
