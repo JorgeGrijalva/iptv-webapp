@@ -17,7 +17,7 @@ const proxy = createProxyMiddleware({
   target: 'http://biza.tv',
   changeOrigin: true,
   secure: false,
-  protocolRewrite: 'https',
+  ws: true,
   onProxyReq: (proxyReq, req, res) => {
     proxyReq.setHeader('Origin', 'http://biza.tv');
     proxyReq.setHeader('Referer', 'http://biza.tv');
@@ -28,15 +28,15 @@ const proxy = createProxyMiddleware({
     '^/movie': '/movie',
     '^/series': '/series',
     '^/xmltv.php': '/xmltv.php',
-    '^/get.php': '/get.php'
+    '^/get.php': '/get.php',
+    '^/player_api.php': '/player_api.php'
   },
   onProxyRes: function (proxyRes, req, res) {
     proxyRes.headers['access-control-allow-origin'] = '*';
     proxyRes.headers['access-control-allow-methods'] = 'GET, POST, OPTIONS';
-    proxyRes.headers['access-control-allow-headers'] = 'Content-Type, Authorization';
+    proxyRes.headers['access-control-allow-headers'] = '*';
     proxyRes.headers['content-security-policy'] = 'upgrade-insecure-requests';
     delete proxyRes.headers['x-frame-options'];
-    delete proxyRes.headers['content-security-policy'];
   }
 });
 

@@ -27,7 +27,7 @@ export class XtremeCodesAPI {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         mode: 'cors'
       }
@@ -39,16 +39,6 @@ export class XtremeCodesAPI {
     }
 
     const jsonRes = await response.json()
-
-    if (
-      action &&
-      jsonRes.hasOwnProperty("user") &&
-      jsonRes.user.hasOwnProperty("status") &&
-      jsonRes.user_info.status === "Disabled"
-    ) {
-      return Promise.reject(new Error("account disabled"))
-    }
-
     return Promise.resolve(jsonRes)
   }
 
