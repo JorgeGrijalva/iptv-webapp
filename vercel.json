@@ -1,12 +1,20 @@
 {
   "version": 2,
+  "builds": [
+    { "src": "api/proxy.js", "use": "@vercel/node" }
+  ],
   "routes": [
-    {
+    { 
       "src": "/api/(.*)",
-      "dest": "/api/proxy.js"
+      "dest": "/api/proxy.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
     }
   ],
   "env": {
-    "VITE_PROXY_URL": "https://iptv-webapp-eta.vercel.app/api"
+    "NODE_ENV": "production"
   }
 } 

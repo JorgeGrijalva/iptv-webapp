@@ -23,6 +23,15 @@ export class XtremeCodesAPI {
     
     const response = await fetch(
       `${proxyUrl}/player_api.php?${queryString.stringify(query)}`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'include'
+      }
     )
 
     if (!response.ok) {

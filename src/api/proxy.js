@@ -4,9 +4,17 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+// Configuración de CORS más permisiva
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
-// Proxy para las peticiones de la API
+// Middleware para manejar preflight requests
+app.options('*', cors());
+
 app.use('/api', createProxyMiddleware({
   target: 'http://biza.tv',
   changeOrigin: true,
@@ -14,6 +22,9 @@ app.use('/api', createProxyMiddleware({
     '^/api': '',
   },
   onProxyRes: function (proxyRes, req, res) {
+    proxyRes.headers['access-control-allow-origin'] = '*';
+    proxyRes.headers['access-control-allow-methods'] = 'GET, POST, OPTIONS';
+    proxyRes.headers['access-control-allow-headers'] = 'Content-Type, Authorization';
     proxyRes.headers['content-security-policy'] = 'upgrade-insecure-requests';
   }
 }));
