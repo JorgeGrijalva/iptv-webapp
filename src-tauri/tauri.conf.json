@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "iptv-webapp",
+  "productName": "FLUTV",
   "version": "0.1.0",
-  "identifier": "com.zephyrus.iptv",
+  "identifier": "com.flutv.iptv",
   "build": {
     "frontendDist": "../build",
     "devUrl": "http://localhost:5173",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "iptv-webapp",
+        "title": "FLUTV",
         "width": 800,
         "height": 600,
         "resizable": true,
