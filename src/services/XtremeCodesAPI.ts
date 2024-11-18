@@ -29,8 +29,7 @@ export class XtremeCodesAPI {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        mode: 'cors',
-        credentials: 'include'
+        mode: 'cors'
       }
     )
 
