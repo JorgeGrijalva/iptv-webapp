@@ -20,7 +20,7 @@ export function useEpisodeUrl(episodeStreamId: number, extension: string) {
 
 export function useChannelUrl(channelId: number, format: string) {
   const accountInfo = useAppSelector(selectAccountInfo)
-  const baseUrl = useAppSelector(selectPreferredBaseUrl)
+  const proxyUrl = import.meta.env.VITE_PROXY_URL;
 
-  return `${baseUrl}/live/${accountInfo.user_info?.username}/${accountInfo.user_info?.password}/${channelId}.${format}`
+  return `${proxyUrl}/live/${accountInfo.user_info?.username}/${accountInfo.user_info?.password}/${channelId}.${format}`
 }

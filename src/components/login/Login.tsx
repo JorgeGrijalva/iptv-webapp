@@ -28,7 +28,7 @@ export const Login: React.FC = () => {
   const dispatch = useAppDispatch()
   const [status, setStatus] = useState<"idle" | "pending" | "loading">("idle")
 
-  const baseUrl = import.meta.env.VITE_API_BASE_URL
+  const proxyUrl = import.meta.env.VITE_PROXY_URL || '/api'
 
   const canSubmit = [username, password].every(Boolean) && status === "idle"
 
@@ -46,7 +46,7 @@ export const Login: React.FC = () => {
     setStatus("pending")
 
     const config = {
-      baseUrl,
+      baseUrl: proxyUrl,
       auth: {
         username,
         password,

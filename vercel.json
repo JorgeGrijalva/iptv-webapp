@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/proxy.js"
+    }
+  ],
+  "env": {
+    "VITE_PROXY_URL": "https://iptv-webapp-eta.vercel.app/api"
+  }
+} 

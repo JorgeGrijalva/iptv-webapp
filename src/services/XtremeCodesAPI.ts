@@ -19,8 +19,10 @@ export class XtremeCodesAPI {
     filter?: { [key: string]: string },
   ): Promise<any> {
     const query = { ...config.auth, action, ...filter }
+    const proxyUrl = import.meta.env.VITE_PROXY_URL || '/api';
+    
     const response = await fetch(
-      `${config.baseUrl}/player_api.php?${queryString.stringify(query)}`,
+      `${proxyUrl}/player_api.php?${queryString.stringify(query)}`,
     )
 
     if (!response.ok) {
